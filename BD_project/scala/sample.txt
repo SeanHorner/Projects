@@ -1,0 +1,99 @@
+{
+"city": {
+"id": 98225,
+"city": "Bellingham",
+"lat": 48.75,
+"lon": -122.49,
+"state": "WA",
+"country": "us",
+"zip": "98225",
+"member_count": 2927
+},
+"events": [
+{
+"created": 1609823002000,
+"duration": 7200000,
+"id": "275555577",
+"name": "TAG Engineering - January 2021 "STEM Education for Adults"",
+"rsvp_limit": 100,
+"date_in_series_pattern": false,
+"status": "upcoming",
+"time": 1611716400000,
+"local_date": "2021-01-26",
+"local_time": "19:00",
+"updated": 1609897846000,
+"utc_offset": -28800000,
+"waitlist_count": 0,
+"yes_rsvp_count": 22,
+"venue": {
+"id": 26906060,
+"name": "Online event",
+"repinned": false,
+"country": "",
+"localized_country_name": ""
+},
+"is_online_event": true,
+"group": {
+"created": 1603334462000,
+"name": "TAG Engineering",
+"id": 34415917,
+"join_mode": "open",
+"lat": 48.75,
+"lon": -122.48999786376953,
+"urlname": "tag-engineering",
+"who": "Members",
+"localized_location": "Bellingham, WA",
+"state": "WA",
+"country": "us",
+"region": "en_US",
+"timezone": "US/Pacific"
+},
+"link": "https://www.meetup.com/tag-engineering/events/275555577/",
+"how_to_find_us": "https://us02web.zoom.us/j/83245592938?pwd=UFFDQlZ1djJhbWIza1Z5bFluWnYxQT09",
+"visibility": "public",
+"member_pay_fee": false
+},
+{
+"created": 1609985704000,
+"duration": 7200000,
+"id": "275596215",
+"name": "TAG IT - February 2021 "The Business of Technology"",
+"date_in_series_pattern": false,
+"status": "upcoming",
+"time": 1612321200000,
+"local_date": "2021-02-02",
+"local_time": "19:00",
+"updated": 1610066595000,
+"utc_offset": -28800000,
+"waitlist_count": 0,
+"yes_rsvp_count": 8,
+"venue": {
+"id": 26906060,
+"name": "Online event",
+"repinned": false,
+"country": "",
+"localized_country_name": ""
+},
+"is_online_event": true,
+"group": {
+"created": 1539295230000,
+"name": "TAG IT",
+"id": 30233376,
+"join_mode": "open",
+"lat": 48.75,
+"lon": -122.48999786376953,
+"urlname": "tag-it",
+"who": "Members",
+"localized_location": "Bellingham, WA",
+"state": "WA",
+"country": "us",
+"region": "en_US",
+"timezone": "US/Pacific"
+},
+"link": "https://www.meetup.com/tag-it/events/275596215/",
+"how_to_find_us": "https://us02web.zoom.us/j/88361938070?pwd=NDU5L1FMU1FkcmdmaXY2SEhMSkE0dz09",
+"visibility": "public",
+"member_pay_fee": false
+}
+]
+}
