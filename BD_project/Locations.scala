@@ -1,5 +1,5 @@
 object Locations {
-  //All U.S. Citites Over 100,000 population
+  //All U.S. Cities Over 100,000 population
   val CityLocationDictionary_1: Map[String, (Double,Double)] = Map(
     "Birmingham" -> (33.5274, -86.7990),
     "Huntsville" -> (34.6990, -86.6730),
