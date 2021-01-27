@@ -10,3 +10,5 @@ It starts with one...
 - Which cities hosted the most tech based events (if we can get good historical data)?
 - How many upcoming events are online compared to in person ones (and what cities have the most upcoming in person events)?
 - Prevalence of different payment options.
+- How has the capacity (rsvp_limit) changed over time?
+- Has there been a change in planning times for events? (time - created)
