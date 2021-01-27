@@ -9,3 +9,4 @@ It starts with one...
 - (if good historical data is available) what is the growth rate of some specified topics in a city over time?
 - Which cities hosted the most tech based events (if we can get good historical data)?
 - How many upcoming events are online compared to in person ones (and what cities have the most upcoming in person events)?
+- Prevalence of different payment options.
