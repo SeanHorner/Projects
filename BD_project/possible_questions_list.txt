@@ -2,3 +2,7 @@ It starts with one...
 
 - What is the trend of new tech vs established tech meetups? (e.g. number of meetups about C++ vs. Rust)
 - What are some of the most common meetup topics? (e.g. Gaming vs. Professional Development, Big Data vs. Automation, Workshops vs. Seminars?)
+- What is the most popular time when events are created? (Find local_time/date)
+- Which event has the most RSVPs?
+- Are events with longer durations more popular vs shorter ones?
+- How many events were created (or will be hosted) for each months?
