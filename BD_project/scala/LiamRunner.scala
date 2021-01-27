@@ -78,6 +78,14 @@ object LiamRunner {
     groupurl
   }
 
+  def group_url_from_groups(spark: SparkSession, jsonpath: String): List[String] = {
+    import spark.implicits._
+    val origDF = spark.read.option("multiline", "true")
+      .json(s"$jsonpath")
+    val groupurl = origDF.select($"urlname").coalesce(1).collect().map(row => row(0).toString).toList
+    groupurl
+  }
+
   def group_event_to_df(spark: SparkSession, jsonpath: String): DataFrame = {
     import spark.implicits._
     val origDF = spark.read.option("multiline", "true")
@@ -105,7 +113,7 @@ object LiamRunner {
       result = origDF.unionByName(toadd)
 //      result.show()
     }
-    result
+    result.distinct()
   }
 
   def saveDfToCsv(df: DataFrame, tsvOutput: String, sep: String = "\t"): Unit = {
