@@ -6,3 +6,4 @@ It starts with one...
 - Which event has the most RSVPs?
 - Are events with longer durations more popular vs shorter ones?
 - How many events were created (or will be hosted) for each months?
+- (if good historical data is available) what is the growth rate of some specified topics in a city over time?
