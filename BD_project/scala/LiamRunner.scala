@@ -5,6 +5,7 @@ import java.io.{BufferedWriter, File, FileWriter}
 import org.apache.spark.sql.{DataFrame, SparkSession}
 import org.apache.spark.sql.functions._
 
+import scala.collection.mutable.ListBuffer
 import scala.io.{BufferedSource, Source}
 
 object LiamRunner {
@@ -12,9 +13,12 @@ object LiamRunner {
   def main(args: Array[String]):Unit = {
     val fromconsole = "sample_upcoming.txt"
     val fixedsample = "nice_upcoming.json"
+    val input_files_titles = List("GoBridge", "JuniorDeveloperHappyHour", "LearnWordPressDiscussions", "UXWizardsBayArea", "WomenWhoCodeSF")
+    val input_files_path: ListBuffer[String] = ListBuffer()
+    for (file_name <- input_files_titles){
+      input_files_path.append("sample_data/" + file_name + ".json")
+    }
     val fromconsoleurl = "michael_sample.txt"
-    val slightly_fixed_url_event = "nice_from_urlname.txt"
-    val fixed_url_event = "nice_from_urlname.json"
     val spark = SparkSession.builder()
       .appName("Meetup Test")
       .master("local[4]")
@@ -30,12 +34,12 @@ object LiamRunner {
     // response to searching for all events by a group into tsv of relevant data
 //    response_to_nice_json(fromconsoleurl, slightly_fixed_url_event)
 //    indexed_json_to_json_array(slightly_fixed_url_event, fixed_url_event)
-    val allevents_group = group_event_to_df(spark, fromconsoleurl)
+    val someevents_group = group_event_to_df(spark, fromconsoleurl)
+    saveDfToCsv(someevents_group, "to_keep.tsv")
+
+    val allevents_group = several_group_event_to_df(spark, input_files_path)
     allevents_group.show()
-
-    saveDfToCsv(allevents_group, "to_keep.tsv")
-
-
+    saveDfToCsv(someevents_group, "allevents.tsv")
   }
 //  def indexed_json_to_json_array(input: String, output: String): Unit = {
 //    val text = getTextContent(input).getOrElse("no events")
@@ -80,6 +84,28 @@ object LiamRunner {
       .json(s"$jsonpath")
     origDF.select($"id", $"name", $"is_online_event", $"status", $"yes_rsvp_count",
       $"rsvp_limit", $"waitlist_count", $"time", $"created", $"duration")
+  }
+
+  def several_group_event_to_df(spark: SparkSession, jsonpaths: ListBuffer[String]): DataFrame = {
+    import spark.implicits._
+    val origDF = spark.read.option("multiline", "true")
+      .json(s"${jsonpaths(0)}")
+      .select($"id", $"name", $"is_online_event", $"status", $"yes_rsvp_count",
+        $"waitlist_count", $"time", $"created", $"duration")
+    var toadd: DataFrame = null
+    var result: DataFrame = null
+//    origDF.show()
+//    jsonpaths.drop(1)
+    for (jsonpath <- jsonpaths) {
+      toadd = spark.read.option("multiline", "true")
+        .json(s"$jsonpath")
+        .select($"id", $"name", $"is_online_event", $"status", $"yes_rsvp_count",
+        $"waitlist_count", $"time", $"created", $"duration")
+//      toadd.show()
+      result = origDF.unionByName(toadd)
+//      result.show()
+    }
+    result
   }
 
   def saveDfToCsv(df: DataFrame, tsvOutput: String, sep: String = "\t"): Unit = {
