@@ -1,0 +1,45 @@
+[{
+        "created": 1609863597000,
+        "duration": 10800000,
+        "id": "275562079",
+        "name": "[GDN Event] Learning Go - Tips for Gophers at All Levels ",
+        "date_in_series_pattern": false,
+        "status": "upcoming",
+        "time": 1611770400000,
+        "local_date": "2021-01-27",
+        "local_time": "10:00",
+        "updated": 1611079162000,
+        "utc_offset": -28800000,
+        "waitlist_count": 0,
+        "yes_rsvp_count": 1125,
+        "venue": {
+            "id": 26906060,
+            "name": "Online event",
+            "repinned": false,
+            "country": "",
+            "localized_country_name": ""
+        },
+        "is_online_event": true,
+        "group": {
+            "created": 1438624016000,
+            "name": "GoBridge",
+            "id": 18798164,
+            "join_mode": "open",
+            "lat": 37.779998779296875,
+            "lon": -122.41999816894531,
+            "urlname": "gobridge",
+            "who": "Gophers",
+            "localized_location": "San Francisco, CA",
+            "state": "CA",
+            "country": "us",
+            "region": "en_US",
+            "timezone": "US/Pacific"
+        },
+        "link": "https://www.meetup.com/gobridge/events/275562079/",
+        "description": "<p>We are extremely excited to announce our first GDN Event - Learning Go - Tips for Gophers at All Levels, following the outpouring of desire for guidance on learning resources and tips we heard from the community during GopherCon 2020.</p> <p>Learn how your fellow Gophers learnt Go, are continuing to learn, as well as getting some recommended learning resources.</p> <p>The event will be hosted by Angelica Hill, and Wilken Rivera. It will feature a range of wonderful speakers from across the community, and across the world, speaking about what they\u2019ve found helpful learning, resources they recommend, as well as tips &amp; tricks when learning Go.</p> <p>All the chatter during the event will be in the #learngomeetup Slack channel in Gophers slack.</p> <p>Agenda:<br/>* 1:00 - 1:20PM (GMT/-5) Introductions<br/>* 1:20 - 3:00PM (GMT/-5): Featured Talks<br/>* 3:00 - 3:20PM (GMT/-5): Open discussion with the speakers<br/>* 3:20 - 3:40PM (GMT/-5): Event Wrap-up</p> <p>Featured Speakers:<br/>* Talk 1: exercism.io - One Platform, Three Perspectives</p> <p>In their talk Nils will investigate the Exercism platform from three different perspectives: As a mentee, as a mentor, and as a team in times of remote work. Nils will describe the experience of teaching on Exercism as well as share their insights gained from using the platform as a tool for remote coding dojos.</p> <p>Speaker: Nils Müller, \"Real - Digital Payment &amp; Technology Services GmbH\", Platform Engineer</p> <p>* Talk 2: Journey Before Destination</p> <p>For many of us, learning to program is a means to an end. We want to get a job, to get paid, or to build a specific app. The end result is that we often try to skip to the end. We want to build \"modern\" apps, to write idiomatic code from the start, and we don't want to waste time learning the \"wrong\" way to do things. In this talk Jon explores the importance of resisting the temptation to try to skip ahead, and why it is important to focus on the learning journey rather than a specific destination.</p> <p>Speaker: Jon Calhoun, Creator of Gophercises</p> <p>* Talk 3: GoBridge mentoring, workshops, and everything in between.</p> <p>In this talk Bill will share GoBridge initiatives, and ways for the community to get involved.</p> <p>Speaker: Bill Kennedy, GoBridge Founder</p> <p>* Talk 4: So you've completed the Tour of Go - what next?</p> <p>The Tour of Go gives an excellent introduction to Go the language. But where do you go next? You need to understand the go command to take those next steps. Wouldn't it be great if you could work through some interactive guides online, without having to set up anything on your computer?</p> <p>In this talk Paul will introduce play-with-go.dev a series of hands-on, interactive, browser-based guides, demonstrate the user experience, and talk about how people can contribute guides to the platform as well.</p> <p>Speaker: Paul Jolly, creator of play-with-go.dev</p> <p>* Talk 5: Learning Go through Open Source</p> <p>Programming languages require practice, patience, and tons of application. But that doesn\u2019t mean you have to do it in isolation. In this talk Wilken will share his journey to learning Go through open source, and share how contributing to open source projects can be a platform for learning at all levels</p> <p>Speaker: Wilken Rivera, HashiCorp, Sr. Software Engineer</p> <p>* Talk 6: Anyone can be a Gopher! (My GopherCon Talk)</p> <p>This will be a video played during the meetup: <a href=\"https://www.youtube.com/watch?v=WNBzMtIaXwE&amp;t=31s\" class=\"embedded\">https://www.youtube.com/watch?v=WNBzMtIaXwE&amp;t=31s</a></p> <p>This talk outlines my motivation, and struggles, to master coding and achieve Go competency during my first year working at The New York Times \u2013 with the help of several Go Gurus.</p> <p>Speakers: Angelica Hill, New York Times, Associate Product Manager</p> <p>* Talk 7: Adrien Delorme: His Go story going from C++ to Go, and his way of learning more Go.</p> <p>From software engineering for embedded systems, video-games, Web, and then to the cloud. In this talk Adrien shares his journey to Go as a C++ game developer to becoming an open source maintainer and Go enthusiast.</p> <p>Speaker: Adrien Delorme, HashiCorp, Sr. Software Engineer</p> ",
+        "how_to_find_us": "https://us02web.zoom.us/j/89891769172?pwd=VWFKS3FpQnZkZEUxSlV5V2dQazM5UT09",
+        "visibility": "public",
+        "pro_is_email_shared": false,
+        "member_pay_fee": false
+    }
+]
