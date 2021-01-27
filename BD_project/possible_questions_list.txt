@@ -12,3 +12,5 @@ It starts with one...
 - Prevalence of different payment options.
 - How has the capacity (rsvp_limit) changed over time?
 - Has there been a change in planning times for events? (time - created)
+- Has the number of in person events been increasing (relative to the total number of events) over time?
+- Where are events hosted the most?
