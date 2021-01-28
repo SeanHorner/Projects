@@ -729,36 +729,17 @@ object description_scrubber {
   )
 
   val FILTER_WORDS_LIST_2 = List(
-    "</a>",
-    "<a>",
-    "<b>",
-    "</b>",
-    "<br>",
-    "</br>",
-    "<div>",
-    "</div>",
-    "<h1>",
-    "</h1>",
-    "<h2>",
-    "</h2>",
-    "<h3>",
-    "</h3>",
-    "<h4>",
-    "</h4>",
-    "<h5>",
-    "</h5>",
-    "<h6>",
-    "</h6>",
-    "<i>",
-    "</i>",
-    "<li>",
-    "</li>",
-    "<ol>",
-    "</ol>",
-    "<p>",
-    "</p>",
-    "<u>",
-    "</u>"
+    "href",
+    "www",
+    "http",
+    "https",
+    "host",
+    "location",
+    "high",
+    "meetup",
+    "perfect",
+    "warriors",
+    "aka"
   )
 
   def description_scrubber(desc: String): String = {
