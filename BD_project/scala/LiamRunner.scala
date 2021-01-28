@@ -11,7 +11,6 @@ import scala.io.{BufferedSource, Source}
 object LiamRunner {
 
   def main(args: Array[String]):Unit = {
-    val fromconsole = "sample_upcoming.txt"
     val fixedsample = "nice_upcoming.json"
     val input_files_titles = List("GoBridge", "JuniorDeveloperHappyHour", "LearnWordPressDiscussions", "UXWizardsBayArea", "WomenWhoCodeSF")
     val input_files_path: ListBuffer[String] = ListBuffer()
@@ -26,14 +25,12 @@ object LiamRunner {
 
     // response to searching for upcoming events into list of groups
 //    response_to_nice_json(fromconsole, fixedsample)
-    val groupurl = group_url_from_upcoming(spark, fixedsample)
-    for (value <- groupurl) {
-      println(value)
-    }
+//    val groupurl = group_url_from_upcoming(spark, fixedsample)
+//    for (value <- groupurl) {
+//      println(value)
+//    }
 
     // response to searching for all events by a group into tsv of relevant data
-//    response_to_nice_json(fromconsoleurl, slightly_fixed_url_event)
-//    indexed_json_to_json_array(slightly_fixed_url_event, fixed_url_event)
     val someevents_group = group_event_to_df(spark, fromconsoleurl)
     saveDfToCsv(someevents_group, "to_keep.tsv")
 
@@ -102,16 +99,16 @@ object LiamRunner {
         $"waitlist_count", $"time", $"created", $"duration")
     var toadd: DataFrame = null
     var result: DataFrame = null
-//    origDF.show()
-//    jsonpaths.drop(1)
     for (jsonpath <- jsonpaths) {
       toadd = spark.read.option("multiline", "true")
         .json(s"$jsonpath")
-        .select($"id", $"name", $"is_online_event", $"status", $"yes_rsvp_count",
-        $"waitlist_count", $"time", $"created", $"duration")
-//      toadd.show()
+
+        .select($"id", $"name", $"local_date", $"group.localized_location", $"is_online_event",
+//          $"description_occurred",
+          $"category_ids", $"time", $"created", $"duration", $"yes_rsvp_count", $"rsvp_limit",
+          $"fee.accepts", $"fee.amount")
+
       result = origDF.unionByName(toadd)
-//      result.show()
     }
     result.distinct()
   }
