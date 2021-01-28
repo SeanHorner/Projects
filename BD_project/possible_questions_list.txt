@@ -1,6 +1,7 @@
 It starts with one...
 
-include: id, description (broken down into keyword occurences), category_ids (or maybe id), created, yes_rsvp_count, duration, local_date, group.localized_location, is_online_event, fee.accepts, fee.amount, rsvp_limit, time, created
+include: id, name, local_date, group.localized_location, is_online_event, description (broken down into keyword occurences), category_ids (or maybe id), time, created, duration, yes_rsvp_count, rsvp_limit, fee.accepts, fee.amount, 
+
 
 - What is the trend of new tech vs established tech meetups? (e.g. number of 
 meetups about C++ vs. Rust) 
