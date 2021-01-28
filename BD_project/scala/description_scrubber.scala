@@ -768,6 +768,7 @@ object description_scrubber {
                   .map(_.toLowerCase())
                   .map(_.trim)
                   .filter(_.length > 2)
+                  .distinct
     
     val result = new StringBuffer()
 
