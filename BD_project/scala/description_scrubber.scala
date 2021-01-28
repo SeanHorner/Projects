@@ -730,7 +730,7 @@ object description_scrubber {
 
   val FILTER_WORDS_LIST_2 = List(
     "</a>",
-    "<a href>",
+    "<a>",
     "<b>",
     "</b>",
     "<br>",
@@ -762,16 +762,12 @@ object description_scrubber {
   )
 
   def description_scrubber(desc: String): String = {
-    var wordArray = desc.split(" ")
+    var wordArray = desc.replaceAll("\\W", " ").split(" ")
     wordArray = wordArray
-                  .map(_.replaceAll("\\W", ""))
                   .map(_.toLowerCase())
-                  .map(_.replace(".", ""))
-                  .map(_.replace(",", ""))
-                  .map(_.replace("/", ""))
-                  .filter(_.length > 1)
                   .map(_.trim)
-
+                  .filter(_.length > 2)
+    
     val result = new StringBuffer()
 
     for(word <- wordArray) {
