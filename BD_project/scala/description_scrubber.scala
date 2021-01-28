@@ -762,7 +762,8 @@ object description_scrubber {
   )
 
   def description_scrubber(desc: String): String = {
-    var wordArray = desc.replaceAll("\\W", " ").split(" ")
+    val desc_not_empty = desc + " "
+    var wordArray = desc_not_empty.replaceAll("\\W", " ").split(" ")
     wordArray = wordArray
                   .map(_.toLowerCase())
                   .map(_.trim)
