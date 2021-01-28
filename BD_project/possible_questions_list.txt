@@ -1,16 +1,33 @@
 It starts with one...
 
-- What is the trend of new tech vs established tech meetups? (e.g. number of meetups about C++ vs. Rust)
+include: id, description (broken down into keyword occurences), category_ids (or maybe id), created, yes_rsvp_count, duration, local_date, group.localized_location, is_online_event, fee.accepts, fee.amount, rsvp_limit, time, created
+
+- What is the trend of new tech vs established tech meetups? (e.g. number of 
+meetups about C++ vs. Rust) 
+	- description (broken down into keyword occurences)
 - What are some of the most common meetup topics? (e.g. Gaming vs. Professional Development, Big Data vs. Automation, Workshops vs. Seminars?)
+	- category_ids or id
 - What is the most popular time when events are created? (Find local_time/date)
+	- created
 - Which event has the most RSVPs?
+	- yes_rsvp_count
 - Are events with longer durations more popular vs shorter ones?
+	- duration and yes_rsvp_count
 - How many events were created (or will be hosted) for each months?
+	- local_date
 - (if good historical data is available) what is the growth rate of some specified topics in a city over time?
+	- category_ids
 - Which cities hosted the most tech based events (if we can get good historical data)?
+	- group.localized_location
 - How many upcoming events are online compared to in person ones (and what cities have the most upcoming in person events)?
+	- is_online_event
 - Prevalence of different payment options.
+	- fee.accepts, fee.amount
 - How has the capacity (rsvp_limit) changed over time?
+	- rsvp_limit
 - Has there been a change in planning times for events? (time - created)
+	- time, created
 - Has the number of in person events been increasing (relative to the total number of events) over time?
+	- is_online_event
 - Where are events hosted the most?
+	- group.localized_location
