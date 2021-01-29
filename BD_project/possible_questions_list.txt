@@ -1,6 +1,6 @@
 It starts with one...
 
-include: id, name, group.name, local_date, local_time, date_month, group.localized_location, venue.name, venue.id , is_online_event, description (broken down into keyword occurences), category_ids (or maybe id), time, created, duration, yes_rsvp_count, rsvp_limit, fee.accepts, fee.amount
+include: id, name, group.name as group_name, group.urlname, local_date, local_time, date_month, group.localized_location, venue.name as v_name, venue.id as v_id, is_online_event, status, category_ids, time, created, duration, yes_rsvp_count, rsvp_limit, fee.accepts, fee.amount, description (broken down into keyword occurences)
 
 Needs to be included: 
 

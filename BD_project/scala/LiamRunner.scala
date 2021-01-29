@@ -2,8 +2,10 @@ package meetup_tests
 
 import java.io.{BufferedWriter, File, FileWriter}
 
+import meetup_tests.Analysis.date_to_month
 import org.apache.spark.sql.{DataFrame, SparkSession}
 import org.apache.spark.sql.functions._
+import org.apache.spark.sql.types.StringType
 
 import scala.collection.mutable.ListBuffer
 import scala.io.{BufferedSource, Source}
@@ -23,51 +25,18 @@ object LiamRunner {
       .master("local[4]")
       .getOrCreate()
 
-    // response to searching for upcoming events into list of groups
-//    response_to_nice_json(fromconsole, fixedsample)
-//    val groupurl = group_url_from_upcoming(spark, fixedsample)
-//    for (value <- groupurl) {
-//      println(value)
-//    }
+//    val someevents_group = group_event_to_df(spark, fixedsample)
+//    saveDfToCsv(someevents_group, "data_50cities_v3.tsv")
 
-    // response to searching for all events by a group into tsv of relevant data
-//    objects_to_array(fromconsoleurl, fixedsample)
-    val someevents_group = group_event_to_df(spark, fixedsample)
-    someevents_group.show()
-    someevents_group.printSchema()
-    saveDfToCsv(someevents_group, "data_50cities.tsv")
-
-//    val allevents_group = several_group_event_to_df(spark, input_files_path)
-//    allevents_group.show()
-//    saveDfToCsv(someevents_group, "allevents.tsv")
+    val df = spark.read
+      .option("header", true)
+      .option("delimiter", "\t")
+      .csv("data_50cities_v3.tsv")
+    val analysis14 = Analysis.online_event_count_trend(spark, df)
+    saveDfToCsv(analysis14, "q14_results.tsv")
+    val analysis11 = Analysis.fee(spark, df)
+    saveDfToCsv(analysis11, "q11_results.tsv")
   }
-//  def indexed_json_to_json_array(input: String, output: String): Unit = {
-//    val text = getTextContent(input).getOrElse("no events")
-//    val beginning = "\"0\": "
-//    val indexes = "\\n\"\\d+\": "
-//    val ending = "}\\n}"
-//    // replace with escaped quote if not preceded or followed by a new line or colon. or followed by a comma
-////    val new_beg_text = text.replaceAll(beginning, "\"events\": [{\n")
-//    val new_beg_text = text.replaceAll(beginning, "\"events\": [")
-//    val new_mid_text = new_beg_text.replaceAll(indexes, "")
-//    val new_text = new_mid_text.replaceAll(ending, "}]\n}")
-//    val file = new File(output)
-//    val bw = new BufferedWriter(new FileWriter(file))
-//    bw.write(new_text)
-//    bw.close()
-//  }
-
-//  def response_to_nice_json(input: String, output: String): Unit = {
-//    val text = getTextContent(input).getOrElse("no events")
-//    val remove_group = "([^:\\n][\\w= ])\\\"([^,:\\n])"
-//    // replace with escaped quote if not preceded or followed by a new line or colon. or followed by a comma
-//    val new_text = text.replaceAll(remove_group, "$1\\\\\"$2")
-//
-//    val file = new File(output)
-//    val bw = new BufferedWriter(new FileWriter(file))
-//    bw.write(new_text)
-//    bw.close()
-//  }
 
   def group_url_from_upcoming(spark: SparkSession, jsonpath: String): List[String] = {
     import spark.implicits._
@@ -87,7 +56,6 @@ object LiamRunner {
   }
 
   def objects_to_array(input: String, output: String): Unit = {
-
     var openedFile: BufferedSource = Source.fromFile(input)
     val file = new File(output)
     val bw = new BufferedWriter(new FileWriter(file))
@@ -103,39 +71,19 @@ object LiamRunner {
   def group_event_to_df(spark: SparkSession, jsonpath: String): DataFrame = {
     import spark.implicits._
     import org.apache.spark.sql.functions.udf
-//    val myUDF = udf(description_scrubber.description_scrubber())
+
     val scrub = udf[String, String](description_scrubber.description_scrubber)
+    val month = udf[String, String](date_to_month)
+
     val origDF = spark.read.option("multiline", "true")
       .json(s"$jsonpath")
       .distinct()
-    origDF.printSchema()
-    origDF.select($"id", $"name", $"local_date", $"group.localized_location", $"is_online_event",
-      //          $"description_occurred", $"meta_category.category_ids" ,
-      $"duration", $"time", $"created", $"yes_rsvp_count", $"rsvp_limit", $"fee.accepts", $"fee.amount", $"description")
-      .withColumn("scrubbed_description", scrub($"description"))
-      .drop($"description")
-  }
-
-  def several_group_event_to_df(spark: SparkSession, jsonpaths: ListBuffer[String]): DataFrame = {
-    import spark.implicits._
-    val origDF = spark.read.option("multiline", "true")
-      .json(s"${jsonpaths(0)}")
-      .select($"id", $"name", $"is_online_event", $"status", $"yes_rsvp_count",
-        $"waitlist_count", $"time", $"created", $"duration")
-    var toadd: DataFrame = null
-    var result: DataFrame = null
-    for (jsonpath <- jsonpaths) {
-      toadd = spark.read.option("multiline", "true")
-        .json(s"$jsonpath")
-
-        .select($"id", $"name", $"local_date", $"group.localized_location", $"is_online_event",
-//          $"description_occurred",
-          $"category_ids", $"time", $"created", $"duration", $"yes_rsvp_count", $"rsvp_limit",
-          $"fee.accepts", $"fee.amount")
-
-      result = origDF.unionByName(toadd)
-    }
-    result.distinct()
+    origDF.select($"id", $"name", $"group.name" as "group_name", $"group.urlname", $"venue.id" as "v_id",
+      $"venue.name" as "v_name", $"local_date", month($"local_date".cast(StringType)) as "date_month", $"local_time",
+      $"group.localized_location", $"is_online_event", $"status",
+//      $"meta_category.category_ids" ,
+      $"duration", $"time", $"created", $"yes_rsvp_count", $"rsvp_limit", $"fee.accepts", $"fee.amount",
+      scrub($"description") as "description")
   }
 
   def saveDfToCsv(df: DataFrame, tsvOutput: String, sep: String = "\t"): Unit = {
@@ -169,4 +117,11 @@ object LiamRunner {
     }
   }
 
+  def date_to_month(date: String): String = {
+    var short_date = date + " "
+    if (short_date.matches("\\d+-\\d+-\\d+ ")) {
+      short_date = date.replaceFirst("(\\d+-\\d+)-\\d+", "$1")
+    }
+    short_date
+  }
 }
