@@ -3,7 +3,7 @@ It starts with one...
 include: id, name, group.name, local_date, local_time, date_month, group.localized_location, venue.name, venue.id , is_online_event, description (broken down into keyword occurences), category_ids (or maybe id), time, created, duration, yes_rsvp_count, rsvp_limit, fee.accepts, fee.amount
 
 
-- 1. What is the trend of new tech vs established tech meetups? (e.g. number of meetups about C++ vs. Rust) 
+- 1. S - What is the trend of new tech vs established tech meetups? (e.g. number of meetups about C++ vs. Rust) 
 	- description (broken down into keyword occurences)
 - 2. Later - What are some of the most common meetup topics? (e.g. Gaming vs. Professional Development, Big Data vs. Automation, Workshops vs. Seminars?)
 	- category_ids or id
