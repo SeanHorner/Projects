@@ -1,34 +1,33 @@
 It starts with one...
 
-include: id, name, group.name, local_date, group.localized_location, venue.name, venue.id , is_online_event, description (broken down into keyword occurences), category_ids (or maybe id), time, created, duration, yes_rsvp_count, rsvp_limit, fee.accepts, fee.amount
+include: id, name, group.name, local_date, local_time, date_month, group.localized_location, venue.name, venue.id , is_online_event, description (broken down into keyword occurences), category_ids (or maybe id), time, created, duration, yes_rsvp_count, rsvp_limit, fee.accepts, fee.amount
 
 
-- 1. What is the trend of new tech vs established tech meetups? (e.g. number of 
-meetups about C++ vs. Rust) 
+- 1. What is the trend of new tech vs established tech meetups? (e.g. number of meetups about C++ vs. Rust) 
 	- description (broken down into keyword occurences)
-- 2. What are some of the most common meetup topics? (e.g. Gaming vs. Professional Development, Big Data vs. Automation, Workshops vs. Seminars?)
+- 2. Later - What are some of the most common meetup topics? (e.g. Gaming vs. Professional Development, Big Data vs. Automation, Workshops vs. Seminars?)
 	- category_ids or id
-- 3. What is the most popular time when events are created? (Find local_time/date)
+- 3. S - What is the most popular time when events are created? (Find local_time/date)
 	- created
-- 4. Which event has the most RSVPs?
+- 4. K - Which event has the most RSVPs?
 	- yes_rsvp_count
-- 5. Are events with longer durations more popular vs shorter ones?
+- 5. S - Are events with longer durations more popular vs shorter ones?
 	- duration and yes_rsvp_count
-- 6. How many events were created (or will be hosted) for each months?
+- 6. Q - How many events were created (or will be hosted) for each months?
 	- local_date
-- 7. (if good historical data is available) what is the growth rate of some specified topics in a city over time?
+- 7. Later - (if good historical data is available) what is the growth rate of some specified topics in a city over time?
 	- category_ids
-- 8. Which cities hosted the most tech based events (if we can get good historical data)?
+- 8. E - Which cities hosted the most tech based events (if we can get good historical data)?
 	- group.localized_location
-- 9. How many upcoming events are online compared to in person ones (and what cities have the most upcoming in person events)?
+- 9. K - How many upcoming events are online compared to in person ones (and what cities have the most upcoming in person events)?
 	- is_online_event
-- 11. Prevalence of different payment options.
+- 11. L - Prevalence of different payment options.
 	- fee.accepts, fee.amount
-- 12. How has the capacity (rsvp_limit) changed over time?
+- 12. Q - How has the capacity (rsvp_limit) changed over time?
 	- rsvp_limit
-- 13. Has there been a change in planning times for events? (time - created)
+- 13. S - Has there been a change in planning times for events? (time - created)
 	- time, created
-- 14. Has the number of in person events been increasing (relative to the total number of events) over time?
+- 14. L - Has the number of in person events been increasing (relative to the total number of events) over time?
 	- is_online_event
-- 15. Where are events hosted the most?
+- 15. E - Where are events hosted the most?
 	- venue.id, venue.name
