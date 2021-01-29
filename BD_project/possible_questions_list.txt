@@ -1,6 +1,6 @@
 It starts with one...
 
-include: id, name, group.name, local_date, group.localized_location, is_online_event, description (broken down into keyword occurences), category_ids (or maybe id), time, created, duration, yes_rsvp_count, rsvp_limit, fee.accepts, fee.amount
+include: id, name, group.name, local_date, group.localized_location, venue.name, venue.id , is_online_event, description (broken down into keyword occurences), category_ids (or maybe id), time, created, duration, yes_rsvp_count, rsvp_limit, fee.accepts, fee.amount
 
 
 - 1. What is the trend of new tech vs established tech meetups? (e.g. number of 
@@ -31,4 +31,4 @@ meetups about C++ vs. Rust)
 - 14. Has the number of in person events been increasing (relative to the total number of events) over time?
 	- is_online_event
 - 15. Where are events hosted the most?
-	- group.localized_location
+	- venue.id, venue.name
