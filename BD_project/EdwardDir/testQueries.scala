@@ -15,7 +15,7 @@ object testQueries {
     import spark.implicits._
     spark.sparkContext.setLogLevel("WARN")
 
-    //This dataframe takes in the json and is used to pull out the venue field.
+    //This dataframe takes in the json (for now) and is used to pull out the venue field.
     val eventsjson = spark.read.option("multiline", "true").json("data_50cities_array.json")
 
    //This is a dataframe containing the name, city, address, and state of the venue of each event and is ordered
@@ -26,9 +26,54 @@ object testQueries {
       .groupBy("Venue Name", "City", "Address", "State")
       .agg(count("Venue Name").as("Number of events"))
       .orderBy(functions.desc("Number of events"))
-      //.show(false)
+      .show(false)
 
-    venues.coalesce(1).write.option("header", "true").option("delimiter", "\t").csv("q15.tsv")
+   // venues.coalesce(1).write.option("header", "true").option("delimiter", "\t").csv("q15.tsv")
+
+    //Creates a dataframe that will contain the event name, the amount of yes RSVPs for the event, and the venue's name, city, and address
+    //  The dataframe is made using the dataframe with the json (for now)
+    val eventsWithRSVPs = eventsjson.select($"name".as("Event Name"), $"venue.name".as("Venue Name"), $"venue.city".as("City"), $"venue.address_1".as("Address"),
+      $"venue.state".as("State"), $"rsvp_count".as("RSVPs received"), $"local_date".as("Date of Event"))
+      .filter($"venue.name" =!= "NULL")
+      .orderBy(functions.desc("RSVPs received"))
+
+    eventsWithRSVPs.show(false)
+
+    //Returns the online events with the most yes rsvps
+    val onlineEvents = eventsWithRSVPs.select($"Event Name", $"Venue Name", $"RSVPs received", $"Date of Event").distinct()
+      .filter($"Venue Name" === "Online event")
+      .orderBy(functions.desc("RSVPs received"))
+      .show(false)
+
+    //Returns the events from the Newton Free Library with the most RSVPs
+    val libraryEvents = eventsWithRSVPs.select("*").distinct()
+      .filter($"Venue Name" === "Newton Free Library")
+      .orderBy(functions.desc("RSVPs received"))
+      .show(false)
+
+    //Returns the events from the Microsoft NERD center with the most RSVPS
+    val microsoftEvents = eventsWithRSVPs.select("*").distinct()
+      .filter($"Venue Name" === "Microsoft New England Research & Development Center (NERD)")
+      .orderBy(functions.desc("RSVPs received"))
+      .show(false)
+
+    //Returns the events from FUBAR Labs with the most RSVPs
+    val fubarEvents = eventsWithRSVPs.select("*").distinct()
+      .filter($"Venue Name" === "FUBAR Labs")
+      .orderBy(functions.desc("RSVPs received"))
+      .show(false)
+
+    //Returns the events from Practical Programming with the most RSVPs
+    val practicalEvents = eventsWithRSVPs.select("*").distinct()
+      .filter($"Venue Name" === "Practical Programming")
+      .orderBy(functions.desc("RSVPs received"))
+      .show(false)
+
+    //Returns the events from MIT CSAIL with the most RSVPs
+    val mitEvents = eventsWithRSVPs.select("*").distinct()
+      .filter($"Venue Name" === "MIT CSAIL")
+      .orderBy(functions.desc("RSVPs received"))
+      .show(false)
 
     //This dataframe is created using the current tsv
     val events = spark.read.option("sep", "\t").option("header", "true").csv("data_50cities_v2.tsv")
@@ -43,7 +88,7 @@ object testQueries {
 
     cities.show(false)
 
-    cities.coalesce(1).write.option("header", "true").option("delimiter", "\t").csv("q8.tsv")
+    //cities.coalesce(1).write.option("header", "true").option("delimiter", "\t").csv("q8.tsv")
 
 
 
