@@ -1,0 +1,2 @@
+Number of in person events: 509552
+Number of online events: 65474
