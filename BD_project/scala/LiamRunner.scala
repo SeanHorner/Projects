@@ -4,7 +4,7 @@ import java.io.{BufferedWriter, File, FileWriter}
 
 import meetup_tests.Analysis.date_to_month
 import org.apache.spark.sql.{DataFrame, SparkSession}
-import org.apache.spark.sql.functions._
+import org.apache.spark.sql.functions.{udf, _}
 import org.apache.spark.sql.types.StringType
 
 import scala.collection.mutable.ListBuffer
@@ -25,17 +25,17 @@ object LiamRunner {
       .master("local[4]")
       .getOrCreate()
 
-//    val someevents_group = group_event_to_df(spark, fixedsample)
-//    saveDfToCsv(someevents_group, "data_50cities_v3.tsv")
+    val someevents_group = group_event_to_df(spark, "all_cities_array.json")
+    saveDfToCsv(someevents_group, "all_cities.tsv")
 
-    val df = spark.read
-      .option("header", true)
-      .option("delimiter", "\t")
-      .csv("data_50cities_v3.tsv")
-    val analysis14 = Analysis.online_event_count_trend(spark, df)
-    saveDfToCsv(analysis14, "q14_results.tsv")
-    val analysis11 = Analysis.fee(spark, df)
-    saveDfToCsv(analysis11, "q11_results.tsv")
+//    val df = spark.read
+//      .option("header", true)
+//      .option("delimiter", "\t")
+//      .csv("data_50cities_v3.tsv")
+//    val analysis14 = Analysis.online_event_count_trend(spark, df)
+//    saveDfToCsv(analysis14, "q14_results.tsv")
+//    val analysis11 = Analysis.fee(spark, df)
+//    saveDfToCsv(analysis11, "q11_results.tsv")
   }
 
   def group_url_from_upcoming(spark: SparkSession, jsonpath: String): List[String] = {
@@ -74,14 +74,15 @@ object LiamRunner {
 
     val scrub = udf[String, String](description_scrubber.description_scrubber)
     val month = udf[String, String](date_to_month)
+    val cat_ids = udf[String, Array[BigInt]](cat_ids_to_string)
 
     val origDF = spark.read.option("multiline", "true")
       .json(s"$jsonpath")
       .distinct()
+    origDF.printSchema()
     origDF.select($"id", $"name", $"group.name" as "group_name", $"group.urlname", $"venue.id" as "v_id",
       $"venue.name" as "v_name", $"local_date", month($"local_date".cast(StringType)) as "date_month", $"local_time",
-      $"group.localized_location", $"is_online_event", $"status",
-//      $"meta_category.category_ids" ,
+      $"group.localized_location", $"is_online_event", $"status", cat_ids($"group.meta_category.category_ids") as "cat_ids",
       $"duration", $"time", $"created", $"yes_rsvp_count", $"rsvp_limit", $"fee.accepts", $"fee.amount",
       scrub($"description") as "description")
   }
@@ -123,5 +124,14 @@ object LiamRunner {
       short_date = date.replaceFirst("(\\d+-\\d+)-\\d+", "$1")
     }
     short_date
+  }
+
+  def cat_ids_to_string(input_ids: Array[BigInt]): String = {
+    var cat_ids = ""
+    for (id <- input_ids){
+      cat_ids += id + ", "
+    }
+    cat_ids.dropRight(2)
+    cat_ids
   }
 }
