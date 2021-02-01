@@ -3,13 +3,12 @@ import org.apache.log4j._
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.types.IntegerType
 
-object KyleAnalysisTesting {
+object QuestionFour {
 
   def main(args: Array[String]) = {
 
     val dataFile = "all_cities_array.json" //Change this to proper path for data
     val savePathQuestionFour = "C:\\Users\\kylep\\Desktop\\StagingProject\\Code\\Q4" //Change this to desired path when saving file
-    val savePathQuestionNine = "C:\\Users\\kylep\\Desktop\\StagingProject\\Code\\Q9"
 
     Logger.getLogger("org").setLevel(Level.ERROR)
 
@@ -24,14 +23,16 @@ object KyleAnalysisTesting {
     val rawEventDF = spark.read
       .option("multiline","true").json(dataFile)
 
+
       //Use the code below if you're using a tsv file
       //.option("sep","\t").option("header","true").csv(tsvFile)
 
 //    rawEventDF.show(20)
 
-    val eventDF = rawEventDF.withColumn("yes_rsvp_count",col("yes_rsvp_count").cast(IntegerType))
+    val eventDF = rawEventDF
+      .withColumn("yes_rsvp_count",col("yes_rsvp_count").cast(IntegerType))
     //Getting the highest RSVP count
-    eventDF.select("name","yes_rsvp_count","is_online_event")
+    //eventDF.select("name","yes_rsvp_count","is_online_event")
 
     val onlineDF = eventDF.select("name","yes_rsvp_count","is_online_event")
       .filter($"is_online_event"==="true")
