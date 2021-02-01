@@ -5,7 +5,7 @@ Questions 6 and 12
 
 package meetuptrend
 
-import com.cibo.evilplot.colors.HSL
+import com.cibo.evilplot.colors._
 import org.apache.spark.sql.{DataFrame, Row, SparkSession}
 
 import java.io.{BufferedReader, File, InputStreamReader, PrintWriter}
@@ -30,11 +30,12 @@ object Runner {
 
     import spark.implicits._
 
-    // Create view of dataframe for Spark SQL
-    val df = spark.read.option("header", "true")
-      .option("sep", "\t")
-      .csv("data_50cities_v3.tsv")
-      .createOrReplaceTempView("view1")
+    // Read parquet files and convert to dataframes
+    val df = spark.read.parquet("all_cities.parquet").createOrReplaceTempView("view1")
+//      spark.read.option("header", "true")
+//      .option("sep", "\t")
+//      .csv("data_50cities_v3.tsv")
+//      .createOrReplaceTempView("view1")
 
     // Find tech event counts for each year starting at 2002 to 2020
     val q1 = spark.sql("SELECT SUBSTRING(view1.local_date, 1, 4) AS year, COUNT(*) AS counts " +
@@ -45,7 +46,8 @@ object Runner {
       "ORDER BY year ASC")//.show()
 
     // Store results into csv files
-    //q1.coalesce(1).write.format("com.databricks.spark.csv").save("results/yearly_events")
+    q1.coalesce(1).write.format("com.databricks.spark.csv")
+      .save("results/yearly_events")
 
     //-----------------------------------------------------------------------------------------------------------------
     // Question 6: Find the tech event counts for each month in 2020
@@ -68,8 +70,10 @@ object Runner {
       "ORDER BY months")//.show()
 
     // Events created comparisons for 2020, 2019, and 2018.
-    val q2 = q2a.join(q2b.join(q2c, "months"), "months").orderBy($"months".asc).collect()
-    //q2.coalesce(1).write.format("com.databricks.spark.csv").save("results/monthly_events_2018_2020")
+    val q2 = q2a.join(q2b.join(q2c, "months"), "months").orderBy($"months".asc)
+
+    q2.coalesce(1).write.format("com.databricks.spark.csv")
+      .save("results/monthly_events_2018to2020")
 
     //-----------------------------------------------------------------------------------------------------------------
     // Question 12: How has the capacity (rsvp_limit) changed over time? Find rsvp_avg.
@@ -81,7 +85,8 @@ object Runner {
       "GROUP BY year " +
       "ORDER BY year")//.show()
 
-    //q3.coalesce(1).write.format("com.databricks.spark.csv").save("results/yearly_rsvp")
+    q3.coalesce(1).write.format("com.databricks.spark.csv")
+      .save("results/yearly_rsvp")
 
     //-----------------------------------------------------------------------------------------------------------------
     // Sub-question: Find avg rsvp_limit for each month in 2020.
@@ -109,28 +114,31 @@ object Runner {
       "ORDER BY months")//.show()
 
     // AVG rsvp_limit comparisons between 2020, 2019, and 2018.
-    val q4 = q4a.join(q4b.join(q4c, "months"), "months").orderBy($"months".asc).collect()
-    //q4.coalesce(1).write.format("com.databricks.spark.csv").save("results/monthly_rsvp_2018_2020")
+    val q4 = q4a.join(q4b.join(q4c, "months"), "months").orderBy($"months".asc)
+
+    q4.coalesce(1).write.format("com.databricks.spark.csv")
+      .save("results/monthly_rsvp_2018to2020")
 
     //-----------------------------------------------------------------------------------------------------------------
     // Plot stacked bar chart
-    plotStackedBar(q2, "Events Created Comparisons From 2018-2020", "plot2")
-    plotStackedBar(q4, "RSVP Limit Comparisons From 2018-2020", "plot4")
+    plotStackedBar(q2, "Tech Events Created Monthly From 2018-2020", "plot2")
+    plotStackedBar(q4, "Average RSVP Limit Monthly From 2018-2020", "plot4")
 
     // Plot bar charts
-      plotBar(q1, "Tech Events From 2002-2020", "plot1")
-//    plotBar(q2, "Tech Events in 2020", "plot2")
-      plotBar(q3, "RSVP Limit Over Years (2005-2020)", "plot3")
-//    plotBar(q4, "RSVP Limit For Each Month in 2020", "plot4")
+    plotBar(q1, "Tech Events Created Yearly From 2002-2020", "plot1")
+    plotBar(q3, "Average RSVP Limit Yearly From 2005-2020", "plot3")
   }
 
   /**
    * Plot stacked bar chart
-   * @param arr Dataframe converted into Array of rows where the first column is the x-axis label.
+   * @param df Dataframe results for plotting where first column is the x-axis labels.
    * @param title Name of the chart.
    * @param fname File name of the png(chart image) saved under a directly path.
    */
-  def plotStackedBar(arr: Array[Row], title: String, fname: String): Unit ={
+  def plotStackedBar(df: DataFrame, title: String, fname: String): Unit ={
+    // Convert df into Array of Rows
+    val arr = df.collect()
+
     var seq = Seq[Double]()
     var yAxis = Seq[Seq[Double]]()
     var xAxis = Seq[String]()
@@ -150,6 +158,7 @@ object Runner {
       }
     })
 
+    val colors = Color.stream.take(1)
     // Plot stacked bar chart with three different years
     BarChart.stacked(yAxis, labels = Seq("2020", "2019", "2018")) // Name your stacked labels
       .title(title)
