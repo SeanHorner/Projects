@@ -7,7 +7,7 @@ Needs to be included:
 
 - 1. S - What is the trend of new tech vs established tech meetups? (e.g. number of meetups about C++ vs. Rust) 
 	- description (broken down into keyword occurences)
-- 2. Later - What are some of the most common meetup topics? (e.g. Gaming vs. Professional Development, Big Data vs. Automation, Workshops vs. Seminars?)
+- 2. M - What are some of the most common meetup topics? (e.g. Gaming vs. Professional Development, Big Data vs. Automation, Workshops vs. Seminars?)
 	- category_ids or id
 - 3. S - What is the most popular time when events are created? (Find local_time/date)
 	- created
