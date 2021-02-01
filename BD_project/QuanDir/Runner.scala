@@ -6,11 +6,12 @@ Questions 6 and 12
 package meetuptrend
 
 import com.cibo.evilplot.colors.HSL
-import org.apache.spark.sql.{DataFrame, SparkSession}
+import org.apache.spark.sql.{DataFrame, Row, SparkSession}
 
 import java.io.{BufferedReader, File, InputStreamReader, PrintWriter}
 import com.cibo.evilplot.plot._
 import com.cibo.evilplot.plot.aesthetics.DefaultTheme._
+
 
 object Runner {
   def main(args: Array[String]): Unit ={
@@ -26,6 +27,8 @@ object Runner {
 
     // Set console log to give warnings or worse
     spark.sparkContext.setLogLevel("WARN")
+
+    import spark.implicits._
 
     // Create view of dataframe for Spark SQL
     val df = spark.read.option("header", "true")
@@ -44,15 +47,31 @@ object Runner {
     // Store results into csv files
     //q1.coalesce(1).write.format("com.databricks.spark.csv").save("results/yearly_events")
 
+    //-----------------------------------------------------------------------------------------------------------------
     // Question 6: Find the tech event counts for each month in 2020
-    val q2 = spark.sql("SELECT SUBSTRING(view1.local_date, 6, 2) AS months, COUNT(*) AS counts " +
+    val q2a = spark.sql("SELECT SUBSTRING(view1.local_date, 6, 2) AS months, COUNT(*) AS 2020_counts " +
       "FROM view1 " +
       "WHERE view1.local_date LIKE '2020%' " +
       "GROUP BY months " +
       "ORDER BY months")//.show()
+    // Find the tech event counts for each month in 2019
+    val q2b = spark.sql("SELECT SUBSTRING(view1.local_date, 6, 2) AS months, COUNT(*) AS 2019_counts " +
+      "FROM view1 " +
+      "WHERE view1.local_date LIKE '2019%' " +
+      "GROUP BY months " +
+      "ORDER BY months")//.show()
+    // Find the tech event counts for each month in 2018
+    val q2c = spark.sql("SELECT SUBSTRING(view1.local_date, 6, 2) AS months, COUNT(*) AS 2018_counts " +
+      "FROM view1 " +
+      "WHERE view1.local_date LIKE '2018%' " +
+      "GROUP BY months " +
+      "ORDER BY months")//.show()
 
-    //q2.coalesce(1).write.format("com.databricks.spark.csv").save("results/monthly_events_2020")
+    // Events created comparisons for 2020, 2019, and 2018.
+    val q2 = q2a.join(q2b.join(q2c, "months"), "months").orderBy($"months".asc).collect()
+    //q2.coalesce(1).write.format("com.databricks.spark.csv").save("results/monthly_events_2018_2020")
 
+    //-----------------------------------------------------------------------------------------------------------------
     // Question 12: How has the capacity (rsvp_limit) changed over time? Find rsvp_avg.
     // TODO: 2006 has a spike, but why?
     val q3 = spark.sql("SELECT SUBSTRING(view1.local_date, 1, 4) AS year, " +
@@ -64,46 +83,114 @@ object Runner {
 
     //q3.coalesce(1).write.format("com.databricks.spark.csv").save("results/yearly_rsvp")
 
+    //-----------------------------------------------------------------------------------------------------------------
     // Sub-question: Find avg rsvp_limit for each month in 2020.
-    val q4 = spark.sql("SELECT SUBSTRING(view1.local_date, 6, 2) AS months, " +
-      "ROUND(AVG(view1.rsvp_limit), 2) AS rsvp_avg " +
+    val q4a = spark.sql("SELECT SUBSTRING(view1.local_date, 6, 2) AS months, " +
+      "ROUND(AVG(view1.rsvp_limit), 2) AS rsvp_avg_2020 " +
       "FROM view1 " +
       "WHERE view1.local_date LIKE '2020%' " +
       "GROUP BY months " +
       "ORDER BY months")//.show()
 
-    //q4.coalesce(1).write.format("com.databricks.spark.csv").save("results/monthly_rsvp_2020")
+    // Sub-question: Find avg rsvp_limit for each month in 2019.
+    val q4b = spark.sql("SELECT SUBSTRING(view1.local_date, 6, 2) AS months, " +
+      "ROUND(AVG(view1.rsvp_limit), 2) AS rsvp_avg_2019 " +
+      "FROM view1 " +
+      "WHERE view1.local_date LIKE '2019%' " +
+      "GROUP BY months " +
+      "ORDER BY months")//.show()
+
+    // Sub-question: Find avg rsvp_limit for each month in 2018.
+    val q4c = spark.sql("SELECT SUBSTRING(view1.local_date, 6, 2) AS months, " +
+      "ROUND(AVG(view1.rsvp_limit), 2) AS rsvp_avg_2018 " +
+      "FROM view1 " +
+      "WHERE view1.local_date LIKE '2018%' " +
+      "GROUP BY months " +
+      "ORDER BY months")//.show()
+
+    // AVG rsvp_limit comparisons between 2020, 2019, and 2018.
+    val q4 = q4a.join(q4b.join(q4c, "months"), "months").orderBy($"months".asc).collect()
+    //q4.coalesce(1).write.format("com.databricks.spark.csv").save("results/monthly_rsvp_2018_2020")
+
+    //-----------------------------------------------------------------------------------------------------------------
+    // Plot stacked bar chart
+    plotStackedBar(q2, "Events Created Comparisons From 2018-2020", "plot2")
+    plotStackedBar(q4, "RSVP Limit Comparisons From 2018-2020", "plot4")
 
     // Plot bar charts
-    plot(q1, "Tech Events From 2002-2020", "plot1")
-    plot(q2, "Tech Events in 2020", "plot2")
-    plot(q3, "RSVP Limit Over Years (2005-2020)", "plot3")
-    plot(q4, "RSVP Limit For Each Month in 2020", "plot4")
+      plotBar(q1, "Tech Events From 2002-2020", "plot1")
+//    plotBar(q2, "Tech Events in 2020", "plot2")
+      plotBar(q3, "RSVP Limit Over Years (2005-2020)", "plot3")
+//    plotBar(q4, "RSVP Limit For Each Month in 2020", "plot4")
   }
 
-  // Plot bar charts using Dataframe results
-  def plot(df: DataFrame, title: String, fname: String): Unit ={
+  /**
+   * Plot stacked bar chart
+   * @param arr Dataframe converted into Array of rows where the first column is the x-axis label.
+   * @param title Name of the chart.
+   * @param fname File name of the png(chart image) saved under a directly path.
+   */
+  def plotStackedBar(arr: Array[Row], title: String, fname: String): Unit ={
+    var seq = Seq[Double]()
+    var yAxis = Seq[Seq[Double]]()
+    var xAxis = Seq[String]()
+
+    // Populate x-axis
+    arr.foreach(row => for(i <- 0 until row.length){
+      if(i == 0){
+        xAxis = xAxis :+ row(i).toString
+      }
+    })
+    // Populate stacked y-axis
+    arr.foreach(row => for(i <- 1 until row.length){
+      seq = seq :+ row(i).toString.toDouble
+      if(i == row.length-1){
+        yAxis = yAxis :+ seq
+        seq = Seq[Double]()
+      }
+    })
+
+    // Plot stacked bar chart with three different years
+    BarChart.stacked(yAxis, labels = Seq("2020", "2019", "2018")) // Name your stacked labels
+      .title(title)
+      .xAxis(xAxis)
+      .yAxis()
+      .ybounds(0) // Set y-axis to start at 0
+      .frame()
+      .bottomLegend()
+      .render()
+      .write(new File(s"C:/Users/quanv/IdeaProjects/stagingpj-meetup/${fname}.png"))
+
+  }
+
+  /**
+   * Plot normal bar chart
+   * @param df Takes in dataframe results from Spark SQL.
+   * @param title Name of the chart.
+   * @param fname File name of the png(chart image) saved under a directly path.
+   */
+  def plotBar(df: DataFrame, title: String, fname: String): Unit ={
     // Convert dataframe into sequence of doubles for axes
     val seq = df.collect().map(row => row.toSeq.map(_.toString.toDouble)).toSeq.flatten
 
-    var counts = Seq[Double]()  // y-axis
-    var labels = Seq[String]()  // x-axis
+    var yAxis = Seq[Double]()
+    var xAxis = Seq[String]()
 
     // Populate x-axis and y-axis
     for(i <- 0 until seq.length){
       if(i%2 == 0){
-        labels = labels :+ (seq(i).toInt.toString)
+        xAxis = xAxis :+ (seq(i).toInt.toString)
       }
     }
     for(i <- 0 until seq.length){
       if(i%2 != 0){
-        counts = counts :+ seq(i)
+        yAxis = yAxis :+ seq(i)
       }
     }
     // Plot a bar chart
-    BarChart.custom(counts.map(Bar.apply))
+    BarChart.custom(yAxis.map(Bar.apply))
       .title(title)
-      .standard(xLabels = labels)
+      .standard(xLabels = xAxis)
       .ybounds(lower = 0)
       //.hline(0)
       //.xAxis(labels)
