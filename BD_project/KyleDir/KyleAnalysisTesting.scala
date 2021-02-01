@@ -3,11 +3,13 @@ import org.apache.log4j._
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.types.IntegerType
 
-object AnalysisTesting {
+object KyleAnalysisTesting {
 
   def main(args: Array[String]) = {
 
-    val tsvFile = "data_50cities_v2.tsv" //Change this to proper path for data
+    val dataFile = "all_cities_array.json" //Change this to proper path for data
+    val savePathQuestionFour = "C:\\Users\\kylep\\Desktop\\StagingProject\\Code\\Q4" //Change this to desired path when saving file
+    val savePathQuestionNine = "C:\\Users\\kylep\\Desktop\\StagingProject\\Code\\Q9"
 
     Logger.getLogger("org").setLevel(Level.ERROR)
 
@@ -19,14 +21,40 @@ object AnalysisTesting {
 
     import spark.implicits._
 
-    val rawEventDF = spark.read.option("sep","\t").option("header","true").csv(tsvFile)
-    rawEventDF.show(20)
+    val rawEventDF = spark.read
+      .option("multiline","true").json(dataFile)
+
+      //Use the code below if you're using a tsv file
+      //.option("sep","\t").option("header","true").csv(tsvFile)
+
+//    rawEventDF.show(20)
 
     val eventDF = rawEventDF.withColumn("yes_rsvp_count",col("yes_rsvp_count").cast(IntegerType))
     //Getting the highest RSVP count
-    eventDF.select("name","yes_rsvp_count")
+    eventDF.select("name","yes_rsvp_count","is_online_event")
+
+    val onlineDF = eventDF.select("name","yes_rsvp_count","is_online_event")
+      .filter($"is_online_event"==="true")
       .sort($"yes_rsvp_count".desc)
-      .show(20)
+      .limit(100)
+      .write
+      .option("header","true")
+      .mode("overwrite")
+      .format("csv")
+      .save(savePathQuestionFour+"Online")
+
+    val offlineDF = eventDF.select("name","yes_rsvp_count","is_online_event")
+      .filter($"is_online_event"==="false")
+      .sort($"yes_rsvp_count".desc)
+      .limit(100)
+      .write
+      .option("header","true")
+      .mode("overwrite")
+      .format("csv")
+      .save(savePathQuestionFour+"InPerson")
+
+
+    spark.stop()
   }
 
 
