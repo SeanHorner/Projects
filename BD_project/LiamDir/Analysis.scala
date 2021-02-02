@@ -109,18 +109,78 @@ object Analysis {
       .groupBy("topic")
       .count()
       .sort(desc("count"))
-      .head(10)
+      .head(8)
       .map(_(0).toString())
       .toList
+
+    var new_data = data
+      .select($"date_month")
+      .where($"date_month" < "2021-02")
+      .groupBy($"date_month")
+      .count()
+      .distinct()
     for (topic <- topic_list){
-      println(topic)
+      new_data = new_data.join(
+        data
+          .select($"date_month" as "date_month_temp", explode($"category_ids") as "topic")
+          .where($"date_month_temp" < "2021-02")
+          .where($"topic" === topic)
+          .groupBy($"date_month_temp", $"topic")
+          .agg(count("topic") as s"${topic}_count"),
+        $"date_month" === $"date_month_temp",
+        "full_outer"
+      )
+        .na.fill(0, Seq(s"${topic}_count"))
+        .withColumn(s"${topic}_prop", col(s"${topic}_count")/col("count")*100)
+        .drop(s"${topic}_count")
+        .drop("date_month_temp")
+        .drop("topic")
     }
 
-    data
-      .select($"date_month", explode($"category_ids") as "topic")
-      .groupBy($"date_month", $"topic")
+    new_data
+      .sort(asc("date_month"))
+  }
+
+  def topic_trend_ny(spark: SparkSession, data: DataFrame): DataFrame = {
+    import spark.implicits._
+    val topic_list = data
+      .select(explode($"category_ids") as "topic")
+      .where($"localized_location" === "New York, NY")
+      .groupBy("topic")
       .count()
-      .sort(desc("date_month"), desc("count"), asc("topic"))
+      .sort(desc("count"))
+      .head(8)
+      .map(_(0).toString())
+      .toList
+
+    var new_data = data
+      .select($"date_month")
+      .where($"localized_location" === "New York, NY")
+      .where($"date_month" < "2021-02")
+      .groupBy($"date_month")
+      .count()
+      .distinct()
+    for (topic <- topic_list){
+      new_data = new_data.join(
+        data
+          .select($"date_month" as "date_month_temp", explode($"category_ids") as "topic")
+          .where($"localized_location" === "New York, NY")
+          .where($"date_month_temp" < "2021-02")
+          .where($"topic" === topic)
+          .groupBy($"date_month_temp", $"topic")
+          .agg(count("topic") as s"${topic}_count"),
+        $"date_month" === $"date_month_temp",
+        "full_outer"
+      )
+        .na.fill(0, Seq(s"${topic}_count"))
+        .withColumn(s"${topic}_prop", col(s"${topic}_count")/col("count")*100)
+        .drop(s"${topic}_count")
+        .drop("date_month_temp")
+        .drop("topic")
+    }
+    new_data.show()
+    new_data
+      .sort(asc("date_month"))
   }
 
   def date_to_month(date: String): String = {
