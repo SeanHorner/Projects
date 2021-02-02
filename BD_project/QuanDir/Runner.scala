@@ -76,10 +76,10 @@ object Runner {
       .save("results/monthly_events_2018to2020")
 
     //-----------------------------------------------------------------------------------------------------------------
-    // Question 12: How has the capacity (rsvp_limit) changed over time? Find rsvp_avg.
-    // TODO: 2006 has a spike, but why?
+    // Question 12: How has the capacity (total rsvp_limit) changed over time? Find total rsvp limit.
+    // From 2005 to 2020
     val q3 = spark.sql("SELECT SUBSTRING(view1.local_date, 1, 4) AS year, " +
-      "ROUND(AVG(view1.rsvp_limit), 2) AS rsvp_avg " +
+      "ROUND(COUNT(view1.rsvp_limit), 2) AS total_rsvp_limit " +
       "FROM view1 " +
       "WHERE view1.local_date LIKE '2%' AND view1.local_date BETWEEN '2005' AND '2021' " +
       "GROUP BY year " +
@@ -89,31 +89,31 @@ object Runner {
       .save("results/yearly_rsvp")
 
     //-----------------------------------------------------------------------------------------------------------------
-    // Sub-question: Find avg rsvp_limit for each month in 2020.
+    // Sub-question: Find total rsvp_limit for each month in 2020.
     val q4a = spark.sql("SELECT SUBSTRING(view1.local_date, 6, 2) AS months, " +
-      "ROUND(AVG(view1.rsvp_limit), 2) AS rsvp_avg_2020 " +
+      "ROUND(COUNT(view1.rsvp_limit), 2) AS total_rsvp_limit_2020 " +
       "FROM view1 " +
       "WHERE view1.local_date LIKE '2020%' " +
       "GROUP BY months " +
       "ORDER BY months")//.show()
 
-    // Sub-question: Find avg rsvp_limit for each month in 2019.
+    // Sub-question: Find total rsvp_limit for each month in 2019.
     val q4b = spark.sql("SELECT SUBSTRING(view1.local_date, 6, 2) AS months, " +
-      "ROUND(AVG(view1.rsvp_limit), 2) AS rsvp_avg_2019 " +
+      "ROUND(COUNT(view1.rsvp_limit), 2) AS total_rsvp_limit_2019 " +
       "FROM view1 " +
       "WHERE view1.local_date LIKE '2019%' " +
       "GROUP BY months " +
       "ORDER BY months")//.show()
 
-    // Sub-question: Find avg rsvp_limit for each month in 2018.
+    // Sub-question: Find total rsvp_limit for each month in 2018.
     val q4c = spark.sql("SELECT SUBSTRING(view1.local_date, 6, 2) AS months, " +
-      "ROUND(AVG(view1.rsvp_limit), 2) AS rsvp_avg_2018 " +
+      "ROUND(COUNT(view1.rsvp_limit), 2) AS total_rsvp_limit_2018 " +
       "FROM view1 " +
       "WHERE view1.local_date LIKE '2018%' " +
       "GROUP BY months " +
       "ORDER BY months")//.show()
 
-    // AVG rsvp_limit comparisons between 2020, 2019, and 2018.
+    // Total rsvp_limit comparisons between 2020, 2019, and 2018.
     val q4 = q4a.join(q4b.join(q4c, "months"), "months").orderBy($"months".asc)
 
     q4.coalesce(1).write.format("com.databricks.spark.csv")
@@ -121,12 +121,12 @@ object Runner {
 
     //-----------------------------------------------------------------------------------------------------------------
     // Plot stacked bar chart
-    plotStackedBar(q2, "Tech Events Created Monthly From 2018-2020", "plot2")
-    plotStackedBar(q4, "Average RSVP Limit Monthly From 2018-2020", "plot4")
+    plotStackedBar(q2, "Tech Events Created Monthly From 2018-2020", "Q6Monthly")
+    plotStackedBar(q4, "Total RSVP Limit Monthly From 2018-2020", "Q12Monthly")
 
     // Plot bar charts
-    plotBar(q1, "Tech Events Created Yearly From 2002-2020", "plot1")
-    plotBar(q3, "Average RSVP Limit Yearly From 2005-2020", "plot3")
+    plotBar(q1, "Tech Events Created Yearly From 2002-2020", "Q6Yearly")
+    plotBar(q3, "Total RSVP Limit Yearly From 2005-2020", "Q12Yearly")
   }
 
   /**
