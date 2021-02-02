@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 city	number of events
 New York, NY	42594
 San Francisco, CA	38313
@@ -789,3 +790,796 @@ Arnold, MO	1
 Fairfield, CT	1
 Vicksburg, MS	1
 West Haven, CT	1
+=======
+city	number of events
+New York, NY	42594
+San Francisco, CA	38313
+Los Angeles, CA	24177
+Austin, TX	23509
+Las Vegas, NV	21323
+Chicago, IL	19833
+Seattle, WA	19255
+Denver, CO	17384
+San Diego, CA	17220
+Atlanta, GA	16179
+Portland, OR	14756
+Washington, DC	14671
+Boston, MA	11721
+Columbus, OH	11538
+Tampa, FL	10558
+Houston, TX	10128
+Longmont, CO	10021
+Reston, VA	9657
+Minneapolis, MN	9476
+Boulder, CO	8946
+Raleigh, NC	8680
+Philadelphia, PA	8588
+Dallas, TX	8563
+Salt Lake City, UT	8467
+Santa Monica, CA	8056
+Irvine, CA	8010
+San Jose, CA	7464
+Durham, NC	7314
+Charlotte, NC	7206
+Phoenix, AZ	6896
+Orlando, FL	6420
+Miami, FL	6260
+Mountain View, CA	5982
+Saint Louis, MO	5848
+Palo Alto, CA	5836
+Nashville, TN	5504
+Pittsburgh, PA	5240
+Cincinnati, OH	5003
+Indianapolis, IN	4967
+Jacksonville, FL	4776
+Detroit, MI	4774
+Cambridge, MA	4612
+Oakland, CA	4392
+Memphis, TN	4255
+Plano, TX	4203
+Sacramento, CA	4195
+Cleveland, OH	4118
+Kansas City, MO	4094
+Fort Lauderdale, FL	3962
+Colorado Springs, CO	3734
+Ann Arbor, MI	3729
+Birmingham, AL	3661
+Carrollton, TX	3584
+Louisville, KY	3428
+San Antonio, TX	3346
+Santa Clara, CA	3317
+Richardson, TX	3188
+Oklahoma City, OK	3117
+Albuquerque, NM	3078
+Baltimore, MD	2901
+Melbourne, FL	2839
+Richmond, VA	2790
+Arlington, VA	2770
+Pasadena, CA	2746
+Milwaukee, WI	2740
+Bellevue, WA	2682
+Fort Collins, CO	2632
+Madison, WI	2575
+Loveland, CO	2559
+Grand Rapids, MI	2523
+Wichita, KS	2472
+Emeryville, CA	2285
+Chattanooga, TN	2200
+Tucson, AZ	2189
+Eugene, OR	2140
+Dayton, OH	1997
+Omaha, NE	1992
+New Orleans, LA	1982
+Berkeley, CA	1939
+Saint Petersburg, FL	1899
+Brooklyn, NY	1890
+Rochester, NY	1838
+Buffalo, NY	1836
+Livermore, CA	1809
+Decatur, GA	1779
+Marietta, GA	1701
+Hartford, CT	1691
+San Ramon, CA	1687
+Upland, CA	1675
+Akron, OH	1658
+Sunnyvale, CA	1588
+Lehi, UT	1585
+Olympia, WA	1574
+Riverside, CA	1558
+Knoxville, TN	1537
+New Brunswick, NJ	1535
+Redmond, WA	1496
+Sarasota, FL	1455
+Santa Barbara, CA	1453
+Des Moines, IA	1440
+Norfolk, VA	1398
+Culver City, CA	1385
+Boise, ID	1370
+Princeton, NJ	1351
+Broomfield, CO	1338
+Fremont, CA	1337
+Long Beach, CA	1323
+Meriden, CT	1294
+Rockville, MD	1287
+Charleston, SC	1286
+Tulsa, OK	1257
+Lowell, MA	1246
+Fresno, CA	1230
+New Haven, CT	1213
+Northampton, MA	1206
+Costa Mesa, CA	1197
+Reno, NV	1153
+Morrisville, NC	1150
+Van Nuys, CA	1150
+Honolulu, HI	1134
+Watertown, CT	1115
+Santa Cruz, CA	1064
+Gainesville, FL	1062
+Suwanee, GA	1007
+Tempe, AZ	1002
+Bend, OR	983
+Everett, WA	974
+Saint Charles, MO	959
+Burbank, CA	945
+Mc Lean, VA	908
+Mesa, AZ	900
+Huntsville, AL	895
+Englewood, CO	894
+Boca Raton, FL	875
+Anchorage, AK	872
+New London, CT	872
+Irving, TX	859
+Mobile, AL	857
+Cary, NC	856
+Alpharetta, GA	827
+San Luis Obispo, CA	815
+Anaheim, CA	774
+Flower Mound, TX	761
+Sonora, CA	746
+Lexington, KY	744
+Wilmington, DE	733
+Denton, TX	728
+Augusta, GA	723
+Chandler, AZ	715
+Scottsdale, AZ	711
+Ames, IA	704
+West Palm Beach, FL	704
+Kalamazoo, MI	704
+Iowa City, IA	696
+Pinellas Park, FL	682
+Fullerton, CA	677
+Peoria, IL	668
+Lincoln, NE	664
+Cupertino, CA	664
+Norwalk, CT	646
+Fishers, IN	638
+Cedar Rapids, IA	621
+Walnut Creek, CA	612
+Ventura, CA	611
+Danbury, CT	609
+Saint Paul, MN	592
+Addison, TX	583
+Winston Salem, NC	579
+Providence, RI	574
+Evansville, IN	572
+Redlands, CA	570
+Huntington Beach, CA	559
+Clearwater, FL	558
+Ridgewood, NJ	546
+La Jolla, CA	540
+Pleasanton, CA	517
+Queen Creek, AZ	515
+Vancouver, WA	505
+Arlington Heights, IL	500
+Chula Vista, CA	495
+Frisco, TX	485
+Somerville, MA	479
+Goleta, CA	474
+Syracuse, NY	470
+Appleton, WI	469
+Columbia, SC	467
+Round Rock, TX	460
+East Lansing, MI	453
+Elkin, NC	452
+Springfield, MO	450
+Framingham, MA	449
+Toledo, OH	449
+Hackensack, NJ	434
+Thousand Oaks, CA	433
+West Chester, OH	432
+Greensboro, NC	430
+Youngstown, OH	427
+Fort Worth, TX	425
+Poughkeepsie, NY	421
+Stamford, CT	420
+Savannah, GA	413
+Murrieta, CA	398
+Burlington, MA	394
+Malvern, PA	392
+Corvallis, OR	392
+North Hollywood, CA	391
+Ithaca, NY	388
+Davenport, IA	384
+Bethlehem, PA	383
+Draper, UT	380
+Overland Park, KS	378
+Jackson, MS	375
+South Bend, IN	373
+Saint Charles, IL	372
+Spokane, WA	372
+Norcross, GA	369
+Fayetteville, NC	366
+Fairfax, VA	363
+Lansing, MI	363
+Torrance, CA	360
+Jackson, MI	339
+Burlington, NC	329
+Athens, GA	328
+Lawrenceville, GA	326
+Newport Beach, CA	326
+Wilmington, NC	324
+Gilbert, AZ	322
+Ferndale, MI	321
+Fort Myers, FL	315
+Southfield, MI	314
+San Mateo, CA	313
+Little Rock, AR	313
+Potomac, MD	311
+South Jordan, UT	308
+Farmington, MI	307
+Paramus, NJ	301
+Royal Oak, MI	300
+Blue Bell, PA	292
+Herndon, VA	290
+Campbell, CA	289
+Newark, NJ	289
+Windermere, FL	288
+Venice, CA	287
+Issaquah, WA	287
+Modesto, CA	286
+Beverly Hills, CA	282
+Tacoma, WA	281
+Naperville, IL	280
+Lafayette, IN	279
+Windsor, ON	278
+Beaverton, OR	272
+Carmel, IN	266
+Newton, MA	265
+Hollywood, FL	262
+Garland, TX	260
+Independence, OH	257
+Doylestown, PA	257
+Alexandria, VA	257
+Westlake Village, CA	257
+Tallahassee, FL	255
+Westminster, CO	255
+Sherman Oaks, CA	253
+Kokomo, IN	251
+Hayward, CA	250
+Flemington, NJ	249
+Milpitas, CA	248
+Mission Viejo, CA	248
+Winter Park, FL	246
+Winnetka, CA	246
+Bayside, NY	240
+Frederick, MD	239
+Bakersfield, CA	237
+Okemos, MI	237
+Santa Ana, CA	237
+Astoria, NY	236
+Lenexa, KS	233
+Findlay, OH	232
+Utica, MI	231
+Mission, KS	231
+Franklin, TN	230
+Orem, UT	227
+Stanford, CA	226
+Chesterfield, MO	225
+Studio City, CA	223
+Valencia, CA	220
+Salem, OR	219
+El Segundo, CA	217
+Capitola, CA	211
+Chapel Hill, NC	210
+Provo, UT	209
+Plainview, NY	207
+Iselin, NJ	202
+West Des Moines, IA	201
+Fort Wayne, IN	200
+Williamsburg, VA	199
+Redwood City, CA	199
+Claremont, CA	197
+Oak Brook, IL	195
+Chico, CA	195
+Huntington, NY	193
+Saint Augustine, FL	191
+Orange, CA	189
+Katy, TX	184
+Dublin, OH	180
+Louisville, CO	179
+Geneva, IL	176
+Aliso Viejo, CA	175
+Santa Fe, NM	172
+Milford, CT	171
+Glen Allen, VA	170
+Grass Valley, CA	168
+El Paso, TX	168
+Evanston, IL	167
+Layton, UT	162
+Sandy, UT	161
+Virginia Beach, VA	160
+Kansas City, KS	160
+Los Gatos, CA	159
+Lawrence, KS	158
+Troy, MI	157
+Green Bay, WI	157
+Spring, TX	156
+Columbia, MO	156
+Willoughby, OH	153
+San Bernardino, CA	153
+Hamilton, ON	152
+Aiea, HI	150
+Littleton, CO	150
+Pembroke Pines, FL	148
+Glendale, CA	148
+North Brunswick, NJ	148
+Bronx, NY	147
+Leawood, KS	146
+Baton Rouge, LA	145
+Arlington, TX	145
+Mason, OH	142
+Lafayette, CO	142
+Northridge, CA	141
+Willow Grove, PA	139
+Cleveland, TN	139
+San Juan Capistrano, CA	139
+Columbia, MD	139
+Hoboken, NJ	136
+Ontario, CA	135
+Lubbock, TX	135
+Miami Beach, FL	135
+Tustin, CA	130
+Jacksonville Beach, FL	130
+Corona, CA	127
+Red Wing, MN	127
+West Hartford, CT	124
+Vienna, VA	121
+Oak Ridge, NC	120
+Chesapeake, VA	120
+Babylon, NY	118
+Lake Forest, CA	117
+Palm Springs, CA	115
+Allentown, PA	115
+Deltona, FL	115
+Temecula, CA	112
+Mount Pleasant, SC	110
+Westerville, OH	110
+Flushing, NY	110
+Monterey, CA	109
+Worcester, MA	109
+Lakeland, FL	108
+Sparks, NV	108
+Arlington, MA	108
+Amherst, MA	105
+Jefferson City, TN	105
+Garden Grove, CA	104
+Roseville, CA	104
+Cherry Hill, NJ	103
+Covington, KY	102
+Ypsilanti, MI	102
+Dunellen, NJ	102
+Woodland Hills, CA	102
+Tuscaloosa, AL	101
+McHenry, IL	101
+Brentwood, TN	100
+Stockton, CA	100
+North Canton, OH	99
+Nevada City, CA	99
+Murfreesboro, TN	98
+Muskogee, OK	98
+Elk Grove, CA	96
+Bloomington, IN	96
+Daytona Beach, FL	96
+Offutt A F B, NE	94
+New Hyde Park, NY	94
+Linthicum Heights, MD	91
+Pewaukee, WI	91
+Carlsbad, CA	91
+Coeur D Alene, ID	91
+West Hollywood, CA	90
+De Pere, WI	90
+White Plains, NY	88
+Bethesda, MD	88
+Greeley, CO	87
+Fargo, ND	87
+Greenwich, CT	87
+Holmdel, NJ	86
+Park City, UT	86
+Florence, OR	86
+Flint, MI	85
+Conroe, TX	81
+Merced, CA	81
+Bradenton, FL	81
+Cuyahoga Falls, OH	81
+Columbus, GA	80
+Stony Brook, NY	80
+La Mirada, CA	79
+Winter Garden, FL	79
+Tyler, TX	78
+Palm Beach Gardens, FL	78
+Wilkes Barre, PA	77
+Avon, CT	77
+Maricopa, AZ	77
+Monmouth Junction, NJ	77
+Canton, OH	76
+Waco, TX	76
+Cranbury, NJ	76
+Camarillo, CA	75
+Norwich, CT	75
+Falls Church, VA	74
+North Little Rock, AR	74
+Manhattan Beach, CA	74
+South San Francisco, CA	73
+American Fork, UT	73
+East Troy, WI	72
+Visalia, CA	72
+Glendale, AZ	72
+Texas City, TX	71
+Trenton, NJ	71
+Boynton Beach, FL	71
+Monterey Park, CA	70
+Montclair, NJ	69
+Sterling, VA	68
+Merritt Island, FL	68
+Bedford, TX	67
+Forest Park, IL	67
+North Palm Beach, FL	67
+Pottstown, PA	66
+Mandeville, LA	66
+Nanuet, NY	66
+Belmont, NC	65
+Lake Oswego, OR	64
+Meridian, ID	63
+Rocklin, CA	63
+Woodstock, GA	62
+Chatsworth, CA	62
+Chalfont, PA	61
+O Fallon, MO	61
+Kissimmee, FL	61
+Lancaster, CA	61
+Carrboro, NC	60
+Neptune Beach, FL	60
+Kirkland, WA	59
+Ashburn, VA	59
+Whittier, CA	59
+Byron Center, MI	58
+Greenvale, NY	58
+Southington, CT	58
+Rocky Hill, CT	58
+Nederland, TX	58
+Neenah, WI	57
+Concord, NC	57
+Montgomery, AL	57
+Long Island City, NY	57
+Newark, DE	57
+Lake Worth, FL	56
+Downers Grove, IL	56
+Fort Mill, SC	55
+Rockford, IL	55
+Pawtucket, RI	54
+Olathe, KS	53
+College Station, TX	52
+Newington, CT	52
+Rochester, MN	52
+Birmingham, MI	52
+Shreveport, LA	52
+Port Washington, NY	51
+Allen Park, MI	51
+McAllen, TX	51
+East Hartford, CT	51
+North Richland Hills, TX	51
+Morristown, TN	51
+Poquoson, VA	51
+Jupiter, FL	50
+Eagle, ID	50
+Easton, PA	50
+Delafield, WI	50
+Agawam, MA	50
+Brighton, MI	50
+Longwood, FL	49
+Marina del Rey, CA	49
+Deland, FL	48
+Fair Oaks, CA	47
+Perrysburg, OH	47
+Janesville, WI	47
+Rochester, MI	47
+St Catharines, ON	46
+Smyrna, GA	46
+Conyers, GA	46
+Auburn, WA	46
+Somerset, NJ	45
+Rolling Meadows, IL	45
+Tracy, CA	45
+Enfield, CT	45
+Encinitas, CA	45
+Roswell, GA	44
+New Rochelle, NY	44
+Macon, GA	44
+Cornelius, NC	44
+Hialeah, FL	43
+Placentia, CA	43
+Coppell, TX	43
+Muncie, IN	43
+Valparaiso, IN	42
+Herriman, UT	42
+Rancho Cucamonga, CA	42
+Escondido, CA	42
+San Marcos, CA	41
+Pontiac, MI	41
+Muskegon, MI	41
+Westbury, NY	40
+Manchester, NH	40
+Tijuana, Mexico	40
+Shawnee, KS	39
+Dearborn, MI	39
+Davidson, NC	38
+Warner Robins, GA	38
+Madison, AL	38
+Midvale, UT	38
+Somerville, NJ	37
+Ocala, FL	37
+Naples, FL	36
+Gainesville, GA	36
+Temple, TX	36
+Topeka, KS	35
+McKinney, TX	35
+Solon, OH	35
+Buckhead, GA	35
+Northport, NY	35
+Hudson, OH	35
+Scotch Plains, NJ	35
+Del Mar, CA	34
+Southampton, NY	34
+Springfield, IL	33
+Encino, CA	33
+Brookfield, WI	33
+Henrico, VA	33
+Henderson, NV	33
+Watsonville, CA	32
+Vista, CA	32
+Grapevine, TX	31
+Moline, IL	31
+Palm Beach, FL	31
+Schaumburg, IL	31
+Deerfield Beach, FL	31
+Gurnee, IL	30
+Lawton, OK	30
+Estero, FL	29
+Ruther Glen, VA	29
+South Pasadena, CA	29
+Oceanside, CA	29
+Liberty Lake, WA	29
+South Amboy, NJ	29
+Chester Springs, PA	29
+Wayne, PA	29
+Sioux Falls, SD	28
+Ogden, UT	28
+Santa Maria, CA	28
+Webster, NY	27
+Zionsville, IN	27
+Rancho Cordova, CA	27
+Kapolei, HI	27
+Aurora, CO	26
+Feasterville Trevose, PA	25
+Hopkins, MN	25
+Newport News, VA	25
+Corpus Christi, TX	24
+Springfield, OR	24
+Seminole, FL	24
+Westlake, OH	24
+Novi, MI	23
+Glassboro, NJ	23
+Brandon, FL	23
+Delray Beach, FL	22
+Auburn, CA	22
+Windsor, CO	22
+New Hope, PA	22
+Strongsville, OH	22
+Madison Heights, MI	21
+Midland, TX	21
+Exton, PA	21
+Chagrin Falls, OH	21
+Lawrence Township, NJ	21
+Dublin, CA	20
+Miamisburg, OH	20
+Bloomfield Hills, MI	20
+Basking Ridge, NJ	20
+Hillsboro, OR	20
+Lafayette, LA	20
+Kennesaw, GA	19
+Holly Springs, NC	19
+North Miami Beach, FL	19
+Garden City, NY	19
+Glastonbury, CT	19
+Edison, NJ	18
+Pompano Beach, FL	18
+East Islip, NY	18
+Concord, CA	18
+Renton, WA	18
+Fogelsville, PA	18
+Tenafly, NJ	18
+Sammamish, WA	18
+Pflugerville, TX	18
+Bay Shore, NY	18
+Hempstead, NY	17
+Woodbury, NY	17
+Woodbridge, NJ	17
+Springfield, MA	17
+Duluth, GA	16
+Stuart, FL	16
+Springfield, OH	16
+Vacaville, CA	16
+Corona del Mar, CA	16
+Independence, OR	16
+Tarrytown, NY	16
+Annapolis Junction, MD	15
+Racine, WI	15
+Snellville, GA	15
+Pomona, CA	15
+Nampa, ID	15
+Bloomington, IL	14
+Normal, IL	13
+Maryland Heights, MO	13
+Poway, CA	13
+Elyria, OH	13
+Laguna Niguel, CA	13
+Kent, OH	13
+Clinton Township, MI	13
+Palm Harbor, FL	12
+Edmond, OK	12
+Pueblo, CO	12
+Mount Juliet, TN	12
+Coraopolis, PA	11
+Bonita Springs, FL	11
+Granada Hills, CA	11
+Goodlettsville, TN	11
+Manchester, CT	10
+Brecksville, OH	10
+Georgetown, TX	10
+New Milford, CT	10
+Cape Coral, FL	10
+Cedar Park, TX	10
+Saratoga, CA	10
+King of Prussia, PA	10
+New Port Richey, FL	9
+Sterling Heights, MI	9
+Apollo Beach, FL	9
+Syosset, NY	9
+Pleasant Ridge, MI	9
+Forest Hills, NY	8
+El Dorado Hills, CA	8
+Pittsburg, CA	8
+Commerce Township, MI	8
+Morgan Hill, CA	8
+Erlanger, KY	8
+Pleasant Grove, UT	8
+Marina, CA	8
+Sanford, FL	7
+Elizabethtown, KY	7
+Cheyenne, WY	7
+New Philadelphia, OH	7
+Old Westbury, NY	7
+Dunedin, FL	7
+Moorestown, NJ	7
+Darien, CT	7
+Playa del Rey, CA	7
+Farmington, UT	7
+Camillus, NY	6
+Jeffersonville, IN	6
+Waukesha, WI	6
+Livonia, MI	6
+Bethpage, NY	6
+Tomball, TX	6
+Rockledge, FL	6
+Fleming Island, FL	6
+North Charleston, SC	6
+Princeton Junction, NJ	6
+Utica, NY	6
+Greenfield, MA	6
+Bridgewater, NJ	6
+Cumming, GA	5
+Harrisville, RI	5
+Jericho, NY	5
+Bridgeport, CT	5
+Oxnard, CA	5
+South Lake Tahoe, CA	5
+Sheboygan, WI	5
+Kilgore, TX	5
+Mineola, NY	5
+Rialto, CA	5
+Westwood, NJ	5
+Davis, CA	5
+Warsaw, IN	4
+Muscatine, IA	4
+Granger, IN	4
+Armonk, NY	4
+Lilburn, GA	4
+Moorpark, CA	4
+Fremont, NE	4
+Glenshaw, PA	4
+South Ozone Park, NY	4
+Orange Park, FL	4
+Bristol, CT	4
+Palm Bay, FL	3
+Watertown, WI	3
+Hendersonville, TN	3
+Hickory, NC	3
+Lansdale, PA	3
+Vero Beach, FL	3
+Yonkers, NY	3
+Parker, CO	3
+West Point, NY	3
+Edinburg, TX	3
+Napa, CA	3
+Aptos, CA	3
+Lodi, CA	3
+Incline Village, NV	3
+New Albany, OH	3
+Oxford, OH	3
+New Britain, CT	3
+Fredericksburg, VA	3
+Apex, NC	3
+Titusville, FL	2
+Sturgeon Bay, WI	2
+Mishawaka, IN	2
+Waukegan, IL	2
+Auburn, AL	2
+Dacula, GA	2
+Seaside, CA	2
+Woodstock, IL	2
+Penfield, NY	2
+Fort Stewart, GA	2
+Grimsby, ON	2
+Noblesville, IN	2
+New Smyrna Beach, FL	2
+Kailua, HI	2
+Maryville, TN	2
+Surprise, AZ	2
+Ponte Vedra, FL	2
+Mount Gilead, NC	2
+Pella, IA	2
+Pacific Palisades, CA	2
+Clarksville, TN	2
+Brooklet, GA	2
+Woodside, NY	2
+Midlothian, VA	2
+Portage, MI	2
+Chesterfield, VA	1
+Italy, TX	1
+Port Saint Lucie, FL	1
+Rock Hill, SC	1
+Bettendorf, IA	1
+Victorville, CA	1
+Yorba Linda, CA	1
+Beachwood, OH	1
+Lewis Center, OH	1
+Murphy, ID	1
+Brandon, MS	1
+Palmdale, CA	1
+Newbury Park, CA	1
+Long Beach, NY	1
+Cocoa Beach, FL	1
+Oviedo, FL	1
+Canton, MI	1
+Athol, MA	1
+Ridgeland, SC	1
+Berthoud, CO	1
+Calabasas, CA	1
+Bartlesville, OK	1
+Agoura Hills, CA	1
+West Hills, CA	1
+Arnold, MO	1
+Fairfield, CT	1
+Vicksburg, MS	1
+West Haven, CT	1
+>>>>>>> ca0372f4e63b91ddf2143c72c76cc89bbecb97ef
