@@ -23,33 +23,32 @@ object LiamRunner {
 
 //    val someevents_group = group_event_to_df(spark, "all_cities_array.json")
 //    saveDfToParquet(someevents_group, "all_cities")
-      val df = spark.read.parquet("all_cities.parquet")
-      df.show()
-      df.printSchema()
+      val df = spark.read.parquet("input/all_cities.parquet")
+
 
     val analysis14 = Analysis.online_event_count_trend(spark, df)
-    saveDfToCsv(analysis14, "q14_results.tsv")
-    Plots.q14_plots(analysis14, "Trend in Online vs In-person Events", "online")
-    Plots.q14_line_plots(analysis14, "Trend in Online vs In-person Events", "online_line")
+    saveDfToCsv(analysis14, "results/q14/q14_results.tsv")
+    Plots.q14_plots(analysis14, "Trend in Online vs In-person Events", "results/q14/online")
+    Plots.q14_line_plots(analysis14, "Trend in Online vs In-person Events", "results/q14/online_line")
 
     val analysis11a = Analysis.fee(spark, df)
-    saveDfToCsv(analysis11a, "q11_results_a.tsv")
+    saveDfToCsv(analysis11a, "results/q11/q11_results_a.tsv")
 //    Plots.q11a_plot(analysis11a, "Trend in Fee Type", "fee_type")
-    Plots.q11a_line_plot(analysis11a, "Trend in Fee Type", "fee_type_line")
+    Plots.q11a_line_plot(analysis11a, "Trend in Fee Type", "results/q11/fee_type_line")
 
     val analysis11b = Analysis.fee_amount(spark, df)
-    saveDfToCsv(analysis11b, "q11_results_b.tsv")
-    Plots.q11b_plot(analysis11b, "Trend in Fee Amount", "fee_amount")
-    Plots.q11b_line_plot(analysis11b, "Trend in Fee Amount", "fee_amount_line")
+    saveDfToCsv(analysis11b, "results/q11/q11_results_b.tsv")
+    Plots.q11b_plot(analysis11b, "Trend in Fee Amount", "results/q11/fee_amount")
+    Plots.q11b_line_plot(analysis11b, "Trend in Fee Amount", "results/q11/fee_amount_line")
 
     val analysis7 = Analysis.topic_trend(spark, df)
-    saveDfToCsv(analysis7, "q7_results.tsv")
-    Plots.q7_plots(analysis7, "Trend in Topics", "topic")
-    Plots.q7_line_plots(analysis7, "Trend in Topics", "topic_line")
+    saveDfToCsv(analysis7, "results/q7/q7_results.tsv")
+    Plots.q7_plots(analysis7, "Trend in Topics", "results/q7/topic")
+    Plots.q7_line_plots(analysis7, "Trend in Topics", "results/q7/topic_line")
 
     val analysis7ny = Analysis.topic_trend_ny(spark, df)
-    saveDfToCsv(analysis7ny, "q7_results_ny.tsv")
-    Plots.q7_ny_line_plots(analysis7ny, "Trend in Topics", "topic_ny_line")
+    saveDfToCsv(analysis7ny, "results/q7/q7_results_ny.tsv")
+    Plots.q7_ny_line_plots(analysis7ny, "Trend in Topics", "results/q7/topic_ny_line")
   }
 
   def group_url_from_upcoming(spark: SparkSession, jsonpath: String): List[String] = {
