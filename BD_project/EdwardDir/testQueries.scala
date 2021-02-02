@@ -17,7 +17,10 @@ object testQueries {
 
 
     //This dataframe is created using the tsv file
-    val events = spark.read.option("sep", "\t").option("header", "true").csv(args(0))
+    //val events = spark.read.option("sep", "\t").option("header", "true").csv(args(0))
+    //  .withColumn("rsvp_count", $"yes_rsvp_count".cast("Int"))
+
+    val events = spark.read.parquet(args(0))
       .withColumn("rsvp_count", $"yes_rsvp_count".cast("Int"))
 
     //This dataframe just has the city (localized_location) and a column containing how many events were
@@ -27,7 +30,7 @@ object testQueries {
       .agg(count("city").as("number of events"))
       .sort(functions.desc("number of events"))
 
-    //cities.show(false)
+   // cities.show(false)
 
     //Writes the answer to question 8 to file.
     cities.coalesce(1).write.option("header", "true").option("delimiter", "\t").csv("q8.tsv")
@@ -41,9 +44,9 @@ object testQueries {
 
     //Returns a dataframe that contains the venue name, the group that hosted the event's name and the location
     //  ot the group
-    val popVenues = venues.select($"Venue Name", $"City", $"Group Name")
+    val popVenues = venues.select($"Venue Name", $"City")
       .filter($"Venue Name" =!= "Online event")
-      .groupBy("Venue Name", "City", "Group Name")
+      .groupBy("Venue Name", "City")
       .agg(count("Venue Name").as("Number of Events"))
       .orderBy(functions.desc("Number of Events"))
 
@@ -52,12 +55,40 @@ object testQueries {
     //Writes the answer to question 15 to a file.
     popVenues.coalesce(1).write.option("header", "true").option("delimiter", "\t").csv("q15.tsv")
 
-    //This is a template to return the events in popular venues with the most rsvps that respond with yes.
-    val galvanize = venues.select("*")
-      .filter($"Venue Name" === "Computer Club-Oklahoma City")
-      .orderBy(functions.desc("RSVPs received"))
+    //Side question which group hosted the most events
+    val popGroups = venues.select($"Group Name", $"City")
+      .groupBy("Group Name", "City")
+      .agg(count("Group Name").as("Number of hosted events"))
+      .orderBy(functions.desc("Number of hosted events"))
+      .limit(10)
+      //.show(false)
 
-      //galvanize.show(false)
+    //These are a few queries that show the events from venues that hosted the most events with the
+    //most rsvps received.
+
+    val nova = venues.select("*")
+      .filter($"Venue Name" === "Nova Labs")
+      .orderBy(functions.desc("RSVPs received"))
+      .limit(10)
+      //.show(false)
+
+    val omni = venues.select("*")
+      .filter($"Venue Name" === "Counter Culture Labs, at the Omni Commons")
+      .orderBy(functions.desc("RSVPs received"))
+      .limit(10)
+      //.show(false)
+
+    val corp = venues.select("*")
+      .filter($"Venue Name" === "Extensive Business Solutions Corp.")
+      .orderBy(functions.desc("RSVPs received"))
+      .limit(10)
+      //.show(false)
+
+    val plano = venues.select("*")
+      .filter($"Venue Name" === "TheLab.ms - Plano's Makerspace")
+      .orderBy(functions.desc("RSVPs received"))
+      .limit(10)
+      //.show(false)
 
   }
 }
