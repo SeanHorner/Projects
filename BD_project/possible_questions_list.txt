@@ -33,3 +33,16 @@ Needs to be included:
 	- is_online_event
 - 15. E - Where are events hosted the most?
 	- venue.id, venue.name
+
+G1 - 6, 9, 14 
+G2 - 1
+G3 - 8, 15
+G4 - 2, 7
+G5 - 3, 5, 13
+G6 - 4, 12
+G7 - 11
+
+
+
+
+
