@@ -1,9 +1,9 @@
 package events_parsing
 
-import org.apache.spark.sql.{DataFrame, SparkSession}
 import com.cibo.evilplot.plot._
 import com.cibo.evilplot.plot.aesthetics.DefaultTheme._
 import org.apache.spark.sql.functions.udf
+import org.apache.spark.sql.{DataFrame, SparkSession}
 
 import java.io.File
 
@@ -106,10 +106,13 @@ object spark_runner {
     // Beginning of Question 3 analysis.
     // What is the most popular time when events are created? (Find local_time/date)
     val millisToHour = udf[Int, Long](milToHr)
+    val tzAdj = udf[Long, String](timezoneAdj)
 
     df
-      .filter('created.isNotNull && 'local_time.isNotNull)
-      .withColumn("modulated_time_created", 'created % 86400000)
+      .filter('created.isNotNull && 'localized_location.isNotNull)
+      .withColumn("timezoneAdjustment", tzAdj('localized_location))
+      .withColumn("modulated_time_created",
+        ('created+ 'timezoneAdjustment) % 86400000)
       .withColumn("hour", millisToHour('modulated_time_created))
       .groupBy($"hour")
       .count()
@@ -119,9 +122,10 @@ object spark_runner {
 
     // Full output for graphing
     val Q3DF = df
-      .select('created)
-      .filter(df("created").isNotNull)
-      .withColumn("modulated_time_created", 'created % 86400000)
+      .filter('created.isNotNull && 'localized_location.isNotNull)
+      .withColumn("timezoneAdjustment", tzAdj('localized_location))
+      .withColumn("modulated_time_created",
+        ('created+ 'timezoneAdjustment) % 86400000)
       .withColumn("hour", millisToHour('modulated_time_created))
       .groupBy($"hour")
       .count()
@@ -260,13 +264,18 @@ object spark_runner {
     }
   }
 
-  def milToQtr(millis: Long): Int = {
-    ((millis / 900000).toInt)*15
-  }
+  def timezoneAdj(str: String): Long = analysis_helper.citiesTimeAdj(str)
+
+  def milToQtr(millis: Long): Int = (millis / 900000).toInt*15
 
   def plotBar(df: DataFrame, title: String, fname: String): Unit ={
     // Convert dataframe into sequence of doubles for axes
-    val seq = df.collect().map(row => row.toSeq.map(_.toString.toDouble)).toSeq.flatten
+    val seq =
+      df.collect()
+      .map(row => row.toSeq
+        .map(_.toString.toDouble))
+      .toSeq
+      .flatten
 
     var yAxis = Seq[Double]()
     var xAxis = Seq[String]()
