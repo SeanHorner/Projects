@@ -15,7 +15,7 @@ Needs to be included:
 	- yes_rsvp_count
 - 5. S - Are events with longer durations more popular vs shorter ones?
 	- duration and yes_rsvp_count
-- 6. Q - How many events were created (or will be hosted) for each months?
+- 6. Q - How many events were created for each month/year?
 	- local_date
 - 7. Later - (if good historical data is available) what is the growth rate of some specified topics in a city over time?
 	- category_ids
@@ -25,7 +25,7 @@ Needs to be included:
 	- is_online_event
 - 11. L - Prevalence of different payment options.
 	- fee.accepts, fee.amount
-- 12. Q - How has the capacity (rsvp_limit) changed over time?
+- 12. Q - How has the event capacity (total rsvp_limit) changed over time?
 	- rsvp_limit
 - 13. S - Has there been a change in planning times for events? (time - created)
 	- time, created
