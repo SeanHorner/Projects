@@ -25,38 +25,43 @@ object spark_runner {
 
     val df = spark.read.parquet("all_cities_data.parquet")
 
-    df.show(10)
+    val millisToMin = udf[Int, Long](milToMin)
+    val millisToQtr = udf[Int, Long](milToQtr)
+    val millisToHour = udf[Int, Long](milToHr)
+    val millisToDays = udf[Int, Long](milToDays)
+    val tzAdj = udf[Long, String](timezoneAdj)
+
 
     //-------------------------------------------------------------------------------------------------------
 
     // Beginning of Question 1 analysis.
     // What is the trend of new tech vs established tech meetups? (e.g. number of meetups about C++ vs. Rust)
 
-    val ada_count = df.filter('description.contains("ada")).count()
-    val android_count = df.filter('description.contains("android")).count()
-    val clojure_count = df.filter('description.contains("clojure")).count()
-    val cobol_count = df.filter('description.contains("cobol")).count()
-    val dart_count = df.filter('description.contains("dart")).count()
-    val delphi_count = df.filter('description.contains("delphi")).count()
-    val fortran_count = df.filter('description.contains("fortran")).count()
-    val ios_count = df.filter('description.contains("ios")).count()
-    val java_count = df.filter('description.contains("java")).count()
-    val javascript_count = df.filter('description.contains("javascript")).count()
-    val kotlin_count = df.filter('description.contains("kotlin")).count()
-    val labview_count = df.filter('description.contains("labview")).count()
-    val matlab_count = df.filter('description.contains("matlab")).count()
-    val pascal_count = df.filter('description.contains("pascal")).count()
-    val perl_count = df.filter('description.contains("perl")).count()
-    val php_count = df.filter('description.contains("php")).count()
-    val powershell_count = df.filter('description.contains("powershell")).count()
-    val python_count = df.filter('description.contains("python")).count()
-    val ruby_count = df.filter('description.contains("ruby")).count()
-    val rust_count = df.filter('description.contains("rust")).count()
-    val scala_count = df.filter('description.contains("scala")).count()
-    val sql_count = df.filter('description.contains("sql")).count()
-    val typescript_count = df.filter('description.contains("typescript")).count()
+    val ada_count = df.filter('description.contains("ada ")).count()
+    val android_count = df.filter('description.contains("android ")).count()
+    val clojure_count = df.filter('description.contains("clojure ")).count()
+    val cobol_count = df.filter('description.contains("cobol ")).count()
+    val dart_count = df.filter('description.contains("dart ")).count()
+    val delphi_count = df.filter('description.contains("delphi ")).count()
+    val fortran_count = df.filter('description.contains("fortran ")).count()
+    val ios_count = df.filter('description.contains("ios ")).count()
+    val java_count = df.filter('description.contains("java ")).count()
+    val javascript_count = df.filter('description.contains("javascript ")).count()
+    val kotlin_count = df.filter('description.contains("kotlin ")).count()
+    val labview_count = df.filter('description.contains("labview ")).count()
+    val matlab_count = df.filter('description.contains("matlab ")).count()
+    val pascal_count = df.filter('description.contains("pascal ")).count()
+    val perl_count = df.filter('description.contains("perl ")).count()
+    val php_count = df.filter('description.contains("php ")).count()
+    val powershell_count = df.filter('description.contains("powershell ")).count()
+    val python_count = df.filter('description.contains("python ")).count()
+    val ruby_count = df.filter('description.contains("ruby ")).count()
+    val rust_count = df.filter('description.contains("rust ")).count()
+    val scala_count = df.filter('description.contains("scala ")).count()
+    val sql_count = df.filter('description.contains("sql ")).count()
+    val typescript_count = df.filter('description.contains("typescript ")).count()
     val vb_count = df.filter('description.contains("visual  basic")).count()
-    val wolfram_count = df.filter('description.contains("wolfram")).count()
+    val wolfram_count = df.filter('description.contains("wolfram ")).count()
     val total_count = df.count()
 
     val Q1DF =
@@ -87,7 +92,7 @@ object spark_runner {
       ("Visual Basic", 1991, vb_count),
       ("Wolfram", 1988, wolfram_count)
     ).toDF("Technology", "Year", "Count")
-      .orderBy('year)
+      .orderBy('Year)
 
     Q1DF.show(10)
 
@@ -99,16 +104,31 @@ object spark_runner {
       .option("sep", "\t")
       .save("question_1_data")
 
-    outputConverter("question_1_data", "output/question_1.tsv")
+    val xAxis = Q1DF
+      .select('Technology)
+      .as[String]
+      .collect()
+      .toSeq
+
+    val yAxis = Q1DF
+      .select('Count)
+      .as[Double]
+      .collect()
+      .toSeq
+
+
+
+    outputConverter("question_1_data", "question_1/question_1.tsv")
+    plotBar1(xAxis, yAxis, "Prevalence of Technologies", "question_1/q1", "Technology", "Occurrences")
+
+    Q1DF.unpersist()
 
     //-------------------------------------------------------------------------------------------------------
 
     // Beginning of Question 3 analysis.
     // What is the most popular time when events are created? (Find local_time/date)
-    val millisToHour = udf[Int, Long](milToHr)
-    val tzAdj = udf[Long, String](timezoneAdj)
 
-    df
+    val Q3DF_byCount = df
       .filter('created.isNotNull && 'localized_location.isNotNull)
       .withColumn("timezoneAdjustment", tzAdj('localized_location))
       .withColumn("modulated_time_created",
@@ -117,8 +137,20 @@ object spark_runner {
       .groupBy($"hour")
       .count()
       .orderBy($"count".desc)
-      .show(10)
-    // output from sample: 0.289444 hours (12:17:22 AM) = 202 occurrences
+      .limit(5)
+
+    Q3DF_byCount
+      .select('hour, 'count)
+      .coalesce(1)
+      .write
+      .format("csv")
+      .option("sep", "\t")
+      .save("question_3_data_byCount")
+
+    outputConverter("question_3_data_byCount", "question_3/question_3_byCount.tsv")
+    plotBar(Q3DF_byCount, "Top Event Creation Times", "question_3/q3_byCount", "Hour of Day", "Occurrences")
+
+    Q3DF_byCount.unpersist()
 
     // Full output for graphing
     val Q3DF = df
@@ -131,8 +163,6 @@ object spark_runner {
       .count()
       .orderBy($"hour")
 
-    Q3DF.show(10)
-
     Q3DF
       .select('hour, 'count)
       .coalesce(1)
@@ -141,70 +171,110 @@ object spark_runner {
       .option("sep", "\t")
       .save("question_3_data")
 
-//    plotBar(Q3DF, "Event Creation Times", "q3")
+    outputConverter("question_3_data", "question_3/question_3.tsv")
+    plotBar(Q3DF, "Event Creation Times", "question_3/q3", "Hour of Day", "Occurrences")
 
     Q3DF.unpersist()
-
-    outputConverter("question_3_data", "output/question_3.tsv")
 
     //-------------------------------------------------------------------------------------------------------
 
     // Beginning of Question 5 analysis.
     // Are events with longer durations more popular vs shorter ones?
-    val millisToQtr = udf[Int, Long](milToQtr)
-    df
+
+    // Ranking by count, top 10 values
+    val Q5DF_byCount = df
       .filter(df("duration").isNotNull)
-      .groupBy($"duration")
+      .withColumn("duration_minutes", millisToMin('duration))
+      .groupBy('duration_minutes)
       .count()
       .orderBy($"count".desc)
-      .show(10)
-    // output from sample: 2 hours = 70484 occurrences
+      .limit(5)
 
-    // Full time-scale numbers for graphing
-    val Q5DF = df
+    Q5DF_byCount
+      .coalesce(1)
+      .write
+      .format("csv")
+      .option("sep", "\t")
+      .save("question_5_data_byCount")
+
+    outputConverter("question_5_data_byCount", "question_5/question_5_byCount.tsv")
+    plotBar(Q5DF_byCount, "Top Event Duration", "question_5/q5_byCount")
+
+    Q5DF_byCount.unpersist()
+
+    // Values for up to 12 hours (halfday)
+    val Q5DF_halfday = df
       .filter(df("duration").isNotNull)
       .withColumn("duration_min", millisToQtr('duration))
       .groupBy('duration_min)
       .count()
       .orderBy('duration_min)
+      .limit(48)
 
-    Q5DF.show(10)
-
-    Q5DF
+    Q5DF_halfday
       .coalesce(1)
       .write
       .format("csv")
       .option("sep", "\t")
-      .save("question_5_data")
+      .save("question_5_data_halfday")
 
-//    plotBar(Q5DF, "Event Duration", "q5")
+    outputConverter("question_5_data_halfday", "question_5/question_5_halfday.tsv")
+    plotBar(Q5DF_halfday, "Event Duration (Half Day)", "question_5/q5_halfday", "Minutes", "Occurrences")
 
-    Q5DF.unpersist()
+    Q5DF_halfday.unpersist()
 
-    outputConverter("question_5_data", "output/question_5.tsv")
+    // Full set of values divided into days
+    val Q5DF_fullset = df
+      .filter(df("duration").isNotNull)
+      .withColumn("duration_day", millisToDays('duration))
+      .groupBy('duration_day)
+      .count()
+      .orderBy('duration_day)
+      .filter('duration_day > 1)
+
+    Q5DF_fullset
+      .coalesce(1)
+      .write
+      .format("csv")
+      .option("sep", "\t")
+      .save("question_5_data_fullset")
+
+    outputConverter("question_5_data_fullset", "question_5/question_5_full.tsv")
+    plotBar(Q5DF_fullset, "Event Duration (Full Set)", "question_5/q5_fullset", "Days", "Occurrences")
+
+    Q5DF_fullset.unpersist()
 
     //-------------------------------------------------------------------------------------------------------
 
     // Beginning of Question 13 analysis.
     // Has there been a change in planning times for events? (time - created)
-    val Q13_most = df
+    val Q13_byCount = df
       .filter('created.isNotNull && 'time.isNotNull)
-      .withColumn("prepping_period", millisToQtr('created - 'time))
+      .withColumn("prepping_period", millisToDays('time - 'created))
       .groupBy('prepping_period)
       .count()
       .orderBy('count.desc)
+      .limit(5)
 
-    Q13_most.show(10)
+    Q13_byCount
+      .coalesce(1)
+      .write
+      .format("csv")
+      .option("sep", "\t")
+      .save("question_13_data_byCount")
+
+    outputConverter("question_13_data_byCount", "question_13/question_13_byCount.tsv")
+    plotBar(Q13_byCount, "Top Planning Times", "question_13/q13_byCount")
+
+    Q13_byCount.unpersist()
 
     val Q13DF = df
       .filter('created.isNotNull && 'time.isNotNull)
-      .withColumn("prepping_period", millisToQtr('time - 'created))
+      .withColumn("prepping_period", millisToDays('time - 'created))
       .filter('prepping_period > 0)
       .groupBy('prepping_period)
       .count()
       .orderBy('prepping_period.asc)
-
-    Q13DF.show(10)
 
     Q13DF
       .coalesce(1)
@@ -213,13 +283,14 @@ object spark_runner {
       .option("sep", "\t")
       .save("question_13_data")
 
-//    plotBar(Q13DF, "Prevalence of Planning Times", "q13")
+    outputConverter("question_13_data", "question_13/question_13.tsv")
+    plotBar(Q13DF, "Prevalence of Planning Times", "question_13/q13", "Days", "Occurrences")
 
     Q13DF.unpersist()
-
-    outputConverter("question_13_data", "output/question_13.tsv")
   }
 
+  //-------------------------------------------------------------------------------------------------------
+  //--------------------------------------METHODS----------------------------------------------------------
   //-------------------------------------------------------------------------------------------------------
 
   def outputConverter(searchDir: String, tsvOutput: String): Unit = {
@@ -234,6 +305,10 @@ object spark_runner {
     dir.listFiles.foreach( f => f.delete )
     dir.delete
   }
+
+  def milToMin(millis: Long): Int = (millis/ 60000).toInt
+
+  def milToQtr(millis: Long): Int = (millis / 900000).toInt*15
 
   def milToHr(millis: Long): Int = {
     millis match {
@@ -264,11 +339,11 @@ object spark_runner {
     }
   }
 
+  def milToDays(millis: Long): Int = (millis / 86400000).toInt
+
   def timezoneAdj(str: String): Long = analysis_helper.citiesTimeAdj(str)
 
-  def milToQtr(millis: Long): Int = (millis / 900000).toInt*15
-
-  def plotBar(df: DataFrame, title: String, fname: String): Unit ={
+  def plotBar(df: DataFrame, title: String, fname: String, xLabel: String = "", yLabel:String = ""): Unit ={
     // Convert dataframe into sequence of doubles for axes
     val seq =
       df.collect()
@@ -296,32 +371,32 @@ object spark_runner {
       .title(title)
       .standard(xLabels = xAxis)
       .ybounds(lower = 0)
+      .xLabel(xLabel)
+      .yLabel(yLabel)
       //.hline(0)
       //.xAxis(labels)
       //.yAxis()
       //.frame()
       .render()
-      .write(new File(s"graphs/$fname.png"))
+      .write(new File(s"$fname.png"))
   }
 
-  def stackedBarPlot(df: DataFrame, title: String, fname: String): Unit = {
-    val data = Seq[Seq[Double]](
-      Seq(1, 2, 3),
-      Seq(4, 5, 6),
-      Seq(3, 4, 1),
-      Seq(2, 3, 4)
-    )
-    BarChart
-      .stacked(
-        data,
-        labels = Seq("one", "two", "three")
-      )
-      .title("Stacked Bar Chart Demo")
-      .xAxis(Seq("a", "b", "c", "d"))
-      .yAxis()
-      .frame()
-      .bottomLegend()
+  def plotBar1(x: Seq[String], y: Seq[Double], title: String, fname: String, xLabel: String = "", yLabel:String = ""): Unit ={
+    val yAxis = y
+    val xAxis = x
+
+    // Plot a bar chart
+    BarChart.custom(yAxis.map(Bar.apply))
+      .title(title)
+      .standard(xLabels = xAxis)
+      .ybounds(lower = 0)
+      .xLabel(xLabel)
+      .yLabel(yLabel)
+      //.hline(0)
+      //.xAxis(labels)
+      //.yAxis()
+      //.frame()
       .render()
-      .write(new File(s"graphs/$fname.png"))
+      .write(new File(s"$fname.png"))
   }
 }
