@@ -5,6 +5,7 @@ import org.apache.spark.sql.types.{DoubleType, StringType}
 import org.apache.spark.sql.{DataFrame, SparkSession}
 
 object Analysis {
+
   def online_event_count_trend(spark: SparkSession, data: DataFrame): DataFrame = {
     import spark.implicits._
 
@@ -88,18 +89,49 @@ object Analysis {
   def fee_amount(spark: SparkSession, data: DataFrame): DataFrame = {
     import spark.implicits._
     val ness_data = data
-      .select($"date_month", $"amount", $"status")
+      .select($"date_month", $"accepts", $"amount", $"status")
       .na.fill(0, Array("amount"))
       .where($"status" === "past")
       .where($"date_month" < "2021-02")
+      .where($"amount" > 0)
       .drop($"status")
 
-    val type_data = ness_data
-      .groupBy($"date_month")
-      .agg(round(avg($"amount".cast(DoubleType)), 2) as "average_fee")
-      .where($"average_fee" > 0)
+    val max_fee_val = ness_data
+      .select(max($"amount"))
+      .collect()
+      .toList
+      .map(_(0).toString().toDouble)
 
-    type_data.sort(asc("date_month"))
+    val max_fee = max_fee_val(0)
+
+    val cash_data = ness_data
+      .where($"accepts" === "cash")
+      .groupBy($"date_month" as "cash_date")
+      .agg(avg($"amount".cast(DoubleType)) as "cash_fee")
+
+    val paypal_data = ness_data
+      .where($"accepts" === "paypal")
+      .groupBy($"date_month" as "paypal_date")
+      .agg(avg($"amount".cast(DoubleType)) as "paypal_fee")
+
+    val wepay_data = ness_data
+      .where($"accepts" === "wepay")
+      .where($"amount" < max_fee)
+      .groupBy($"date_month" as "wepay_date")
+      .agg(avg($"amount".cast(DoubleType)) as "wepay_fee")
+
+
+    val tot_data = ness_data
+      .where($"amount" < max_fee)
+      .groupBy($"date_month")
+      .agg(avg($"amount".cast(DoubleType)) as "average_fee")
+      .join(cash_data, $"date_month" === $"cash_date", "full_outer")
+      .join(paypal_data, $"date_month" === $"paypal_date", "full_outer")
+      .join(wepay_data, $"date_month" === $"wepay_date", "full_outer")
+      .na.fill(0, Seq("cash_fee", "paypal_fee", "wepay_fee", "average_fee"))
+      .select($"date_month", $"cash_fee", $"paypal_fee", $"wepay_fee", $"average_fee")
+
+    tot_data.sort(asc("date_month"))
   }
 
   def topic_trend(spark: SparkSession, data: DataFrame): DataFrame = {

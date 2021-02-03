@@ -202,22 +202,24 @@ object Plots {
   }
 
   def q11b_line_plot(df: DataFrame, title: String, fname: String): Unit ={
-    val data = df.collect().map(row => row(1).toString.toDouble).toSeq
+    val data = df.collect().map(row => Seq(row(1), row(2), row(3), row(4)).map(_.toString.toDouble))
     val x_labels = df.collect().map(_(0).toString).map(date_month_to_double(_))
-    val colors = Color.getGradientSeq(1)
+    val colors = Color.getGradientSeq(4)
+    val labels = Seq("Cash", "PayPal", "WePay", "Average")
 
-    val points: Seq[Point] = x_labels.zip(data).toSeq.map(row => Point(row._1, row._2))
+    val points: ListBuffer[Seq[Point]] = ListBuffer()
+    for (ii <- 0 to data(0).length-1) {
+      points.append(x_labels.zip(data.map(_(ii)))
+        .toSeq
+        .map(row => Point(row._1, row._2)))
+    }
 
-      LinePlot(points)
-      .xAxis().yAxis()
-      .xGrid().yGrid()
-      .hline(2d)
-      .title(s"$title")
-      .bottomLegend()
-      .render()
-      .write(new File(s"${fname}.png"))
-
-    LinePlot(points.slice(data.length - 24, data.length))
+    Overlay(
+      LinePlot.series(points(0).slice(points(0).length - 24, points(0).length), labels(0), colors(0)),
+      LinePlot.series(points(1).slice(points(0).length - 24, points(0).length), labels(1), colors(1)),
+      LinePlot.series(points(2).slice(points(0).length - 24, points(0).length), labels(2), colors(2)),
+      LinePlot.series(points(3).slice(points(0).length - 24, points(0).length), labels(3), colors(3))
+    )
       .xAxis().yAxis()
       .xGrid().yGrid()
       .hline(2d)
@@ -226,6 +228,19 @@ object Plots {
       .render()
       .write(new File(s"${fname}_zoomed.png"))
 
+    Overlay(
+      LinePlot.series(points(0), labels(0), colors(0)),
+      LinePlot.series(points(1), labels(1), colors(1)),
+      LinePlot.series(points(2), labels(2), colors(2)),
+      LinePlot.series(points(3), labels(3), colors(3))
+    )
+      .xAxis().yAxis()
+      .xGrid().yGrid()
+      .hline(2d)
+      .title(s"$title")
+      .bottomLegend()
+      .render()
+      .write(new File(s"${fname}.png"))
   }
 
   def q7_plots(df: DataFrame, title: String, fname: String): Unit ={
