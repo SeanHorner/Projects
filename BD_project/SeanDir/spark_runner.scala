@@ -1,7 +1,7 @@
 package events_parsing
 
-import org.apache.spark.sql.functions.{avg, udf}
-import org.apache.spark.sql.{DataFrame, SparkSession}
+import org.apache.spark.sql.functions._
+import org.apache.spark.sql.SparkSession
 
 import java.io.File
 
@@ -23,10 +23,7 @@ object spark_runner {
 
     val df = spark.read.parquet("all_cities_data.parquet")
 
-//    val millisToMin = udf[Int, Long](milToMin)
-//    val millisToQtr = udf[Int, Long](milToQtr)
-//    val millisToHour = udf[Int, Long](milToHr)
-//    val millisToDays = udf[Int, Long](milToDays)
+    val millisToMin = udf[Int, Long](milToMin)
     val tzAdj = udf[Long, String](timezoneAdj)
     def tt(tech: String, year: Int): Int = {
       val startMillis: Long = (year - 1970)*31536000000L
@@ -155,6 +152,7 @@ object spark_runner {
       .write
       .format("csv")
       .option("sep", "\t")
+      .option("headers", "true")
       .save("question_1_data")
 
     outputConverter("question_1_data", "question_1/question_1.tsv")
@@ -171,14 +169,14 @@ object spark_runner {
       .withColumn("timezoneAdjustment", tzAdj('localized_location))
       .withColumn("modulated_time_created",
         ('created+ 'timezoneAdjustment) % 86400000)
-//      .withColumn("hour", millisToHour('modulated_time_created))
-      .groupBy('modulated_time_created)
+      .withColumn("min", millisToMin('modulated_time_created))
+      .groupBy('min)
       .count()
-      .orderBy($"count".desc)
+      .orderBy('count.desc)
       .limit(20)
 
     Q3DF_byCount
-      .select('modulated_time_created, 'count)
+      .select('min, 'count)
       .coalesce(1)
       .write
       .format("csv")
@@ -195,13 +193,13 @@ object spark_runner {
       .withColumn("timezoneAdjustment", tzAdj('localized_location))
       .withColumn("modulated_time_created",
         ('created+ 'timezoneAdjustment) % 86400000)
-//      .withColumn("hour", millisToHour('modulated_time_created))
-      .groupBy('modulated_time_created)
+      .withColumn("min", millisToMin('modulated_time_created))
+      .groupBy('min)
       .count()
-      .orderBy('modulated_time_created)
+      .orderBy('min)
 
     Q3DF
-      .select('modulated_time_created, 'count)
+      .select('min, 'count)
       .coalesce(1)
       .write
       .format("csv")
@@ -220,9 +218,10 @@ object spark_runner {
     // Ranking by count, top 10 values
     val Q5DF_byCount = df
       .filter(df("duration").isNotNull)
-      .groupBy('duration)
+      .withColumn("min", millisToMin('duration))
+      .groupBy('min)
       .count()
-      .orderBy($"count".desc)
+      .orderBy('count.desc)
       .limit(20)
 
     Q5DF_byCount
@@ -236,32 +235,34 @@ object spark_runner {
 
     Q5DF_byCount.unpersist()
 
-    // Values for up to 12 hours (halfday)
-    val Q5DF_halfday = df
+    // Values for up to 24 hours (first day)
+    val Q5DF_first_day = df
       .filter(df("duration").isNotNull)
-      .groupBy('duration)
+      .withColumn("min", millisToMin('duration))
+      .groupBy('min)
       .count()
-      .orderBy('duration)
-      .limit(43200000)
+      .filter('min <= 1440)
+      .orderBy('min)
 
-    Q5DF_halfday
+    Q5DF_first_day
       .coalesce(1)
       .write
       .format("csv")
       .option("sep", "\t")
-      .save("question_5_data_halfday")
+      .save("question_5_data_firstday")
 
-    outputConverter("question_5_data_halfday", "question_5/question_5_halfday.tsv")
+    outputConverter("question_5_data_firstday", "question_5/question_5_firstday.tsv")
 
-    Q5DF_halfday.unpersist()
+    Q5DF_first_day.unpersist()
 
-    // Full set of values
+    // Full set of values after first day
     val Q5DF_fullset = df
       .filter(df("duration").isNotNull)
-      .groupBy('duration)
+      .withColumn("min", millisToMin('duration))
+      .groupBy('min)
       .count()
-      .orderBy('duration)
-      .filter('duration > 86400000)
+      .orderBy('min)
+      .filter('min > 1440)
 
     Q5DF_fullset
       .coalesce(1)
@@ -278,43 +279,74 @@ object spark_runner {
 
     // Beginning of Question 13 analysis.
     // Has there been a change in planning times for events? (time - created)
-    val Q13_byCount = df
-      .filter('created.isNotNull && 'time.isNotNull)
-//      .withColumn("prepping_period", millisToDays('time - 'created))
-      .withColumn("prepping_period", 'time - 'created)
-      .groupBy('prepping_period)
-      .count()
-      .orderBy('count.desc)
-      .limit(20)
+    def prepTime(year: Int): Long = {
+      val startMillis: Long = (year - 1970)*31536000000L
+      val endMillis: Long = (year + 1 - 1970)*31536000000L
 
-    Q13_byCount
-      .coalesce(1)
-      .write
-      .format("csv")
-      .option("sep", "\t")
-      .save("question_13_data_byCount")
+      val prepDF = df
+        .filter('created.isNotNull && 'time.isNotNull)
+        .filter('time > startMillis)
+        .filter('time <= endMillis)
+        .withColumn("prepping_period", 'time - 'created)
+        .withColumn("prep_min", millisToMin('prepping_period))
+        .filter('prep_min >= 0)
+        .groupBy('prep_min)
+        .count()
+        .withColumn("prep_time", 'prep_min * 'count)
 
-    outputConverter("question_13_data_byCount", "question_13/question_13_byCount.tsv")
+      val total_prep_time: Long =
+        prepDF.agg(sum('prep_time).cast("long")).first.getLong(0)
 
-    Q13_byCount.unpersist()
+      val total_events =
+        prepDF.agg(sum('count).cast("long")).first.getLong(0)
 
-    val Q13DF = df
-      .filter('created.isNotNull && 'time.isNotNull)
-      .withColumn("prepping_period", 'time - 'created)
-      .groupBy('prepping_period)
-      .count()
-      .orderBy('prepping_period.asc)
+      val average_prep_time = total_prep_time/total_events
+
+      prepDF.unpersist()
+
+      average_prep_time
+    }
+
+    val Q13Arr = Array(
+      0L, 0L, 0L, 0L, 0L, 0L,
+      0L, 0L, 0L, 0L, 0L, 0L,
+      0L, 0L, 0L, 0L, 0L, 0L)
+
+    for(y <- 2003 to 2020) {
+      Q13Arr(y-2003) = prepTime(y)
+    }
+
+    val Q13DF = Seq(
+      (2003, Q13Arr(0)),
+      (2004, Q13Arr(1)),
+      (2005, Q13Arr(2)),
+      (2006, Q13Arr(3)),
+      (2007, Q13Arr(4)),
+      (2008, Q13Arr(5)),
+      (2009, Q13Arr(6)),
+      (2010, Q13Arr(7)),
+      (2011, Q13Arr(8)),
+      (2012, Q13Arr(9)),
+      (2013, Q13Arr(10)),
+      (2014, Q13Arr(11)),
+      (2015, Q13Arr(12)),
+      (2016, Q13Arr(13)),
+      (2017, Q13Arr(14)),
+      (2018, Q13Arr(15)),
+      (2019, Q13Arr(16)),
+      (2020, Q13Arr(17))
+    ).toDF("year", "avg_prep_time")
 
     Q13DF
       .coalesce(1)
       .write
       .format("csv")
       .option("sep", "\t")
+      .option("headers", "true")
       .save("question_13_data")
 
-    outputConverter("question_13_data", "question_13/question_13.tsv")
+    outputConverter("question_13_data", "question_13/question_13_avgs.tsv")
 
-    Q13DF.unpersist()
   }
 
   //-------------------------------------------------------------------------------------------------------
@@ -334,40 +366,7 @@ object spark_runner {
     dir.delete
   }
 
-//  def milToMin(millis: Long): Int = (millis/ 60000).toInt
-//
-//  def milToQtr(millis: Long): Int = (millis / 900000).toInt*15
-//
-//  def milToHr(millis: Long): Int = {
-//    millis match {
-//      case m if 0 <= m && m < 3600000 => 0
-//      case m if 3600000 <= m && m < 7200000 => 1
-//      case m if 7200000 <= m && m < 10800000 => 2
-//      case m if 10800000 <= m && m < 14400000 => 3
-//      case m if 14400000 <= m && m < 18000000 => 4
-//      case m if 18000000 <= m && m < 21600000 => 5
-//      case m if 21600000 <= m && m < 25200000 => 6
-//      case m if 25200000 <= m && m < 28800000 => 7
-//      case m if 28800000 <= m && m < 32400000 => 8
-//      case m if 32400000 <= m && m < 36000000 => 9
-//      case m if 36000000 <= m && m < 39600000 => 10
-//      case m if 39600000 <= m && m < 43200000 => 11
-//      case m if 43200000 <= m && m < 46800000 => 12
-//      case m if 46800000 <= m && m < 50400000 => 13
-//      case m if 50400000 <= m && m < 54000000 => 14
-//      case m if 54000000 <= m && m < 57600000 => 15
-//      case m if 57600000 <= m && m < 61200000 => 16
-//      case m if 61200000 <= m && m < 64800000 => 17
-//      case m if 64800000 <= m && m < 68400000 => 18
-//      case m if 68400000 <= m && m < 72000000 => 19
-//      case m if 72000000 <= m && m < 75600000 => 20
-//      case m if 75600000 <= m && m < 79200000 => 21
-//      case m if 79200000 <= m && m < 82800000 => 22
-//      case m if 82800000 <= m && m < 86400000 => 23
-//    }
-//  }
-//
-//  def milToDays(millis: Long): Int = (millis / 86400000).toInt
+  def milToMin(millis: Long): Int = (millis/ 60000).toInt
 
   def timezoneAdj(str: String): Long = analysis_helper.citiesTimeAdj(str)
 }
