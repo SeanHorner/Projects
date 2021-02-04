@@ -6,6 +6,20 @@ import org.apache.spark.sql.{DataFrame, SparkSession}
 
 object Analysis {
 
+  def total_events(spark: SparkSession, data: DataFrame): DataFrame = {
+    import spark.implicits._
+
+    val new_data = data
+      .select($"date_month", $"status")
+      .where($"date_month" < "2021-01")
+      .where($"status" === "past")
+      .groupBy($"date_month")
+      .count()
+      .sort("date_month")
+
+    new_data
+  }
+
   def online_event_count_trend(spark: SparkSession, data: DataFrame): DataFrame = {
     import spark.implicits._
 
@@ -32,8 +46,6 @@ object Analysis {
       .select($"date_month", $"online_count", $"inperson_count")
       .sort("date_month")
 
-    new_data.show()
-    new_data.printSchema()
     new_data
   }
 
@@ -210,8 +222,50 @@ object Analysis {
         .drop("date_month_temp")
         .drop("topic")
     }
-    new_data.show()
     new_data
+      .where($"date_month".isNotNull)
+      .sort(asc("date_month"))
+  }
+
+  def topic_trend_wa(spark: SparkSession, data: DataFrame): DataFrame = {
+    import spark.implicits._
+    val topic_list = data
+      .select(explode($"category_ids") as "topic")
+      .where($"localized_location" === "Seattle, WA")
+      .groupBy("topic")
+      .count()
+      .sort(desc("count"))
+      .head(8)
+      .map(_(0).toString())
+      .toList
+
+    var new_data = data
+      .select($"date_month")
+      .where($"localized_location" === "Seattle, WA")
+      .where($"date_month" < "2021-02")
+      .groupBy($"date_month")
+      .count()
+      .distinct()
+    for (topic <- topic_list){
+      new_data = new_data.join(
+        data
+          .select($"date_month" as "date_month_temp", explode($"category_ids") as "topic")
+          .where($"localized_location" === "New York, NY")
+          .where($"date_month_temp" < "2021-02")
+          .where($"topic" === topic)
+          .groupBy($"date_month_temp", $"topic")
+          .agg(count("topic") as s"${topic}_count"),
+        $"date_month" === $"date_month_temp",
+        "full_outer"
+      )
+        .na.fill(0, Seq(s"${topic}_count"))
+        .withColumn(s"${topic}_prop", col(s"${topic}_count")/col("count")*100)
+        .drop(s"${topic}_count")
+        .drop("date_month_temp")
+        .drop("topic")
+    }
+    new_data
+      .where($"date_month".isNotNull)
       .sort(asc("date_month"))
   }
 
