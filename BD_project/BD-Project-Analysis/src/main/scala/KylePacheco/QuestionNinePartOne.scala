@@ -12,6 +12,7 @@ object QuestionNinePartOne {
 
     val dataFile = "all_cities_array.json"
 //    val savePathQuestionNine = "C:\\Users\\kylep\\Desktop\\StagingProject\\Code\\Q9P1"
+  val savePathQuestionNine = "output/question9/"
 
     Logger.getLogger("org").setLevel(Level.ERROR)
 
@@ -48,7 +49,7 @@ object QuestionNinePartOne {
 
     spark.stop()
 
-    val writer = new PrintWriter(new File("Q9P1.txt" ))
+    val writer = new PrintWriter(new File(savePathQuestionNine + "Q9P1.txt" ))
     writer.write(s"Number of in person events: $offlineDFCount\n")
     writer.write(s"Number of online events: $onlineDFCount")
     writer.close()

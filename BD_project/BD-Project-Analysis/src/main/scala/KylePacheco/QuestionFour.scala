@@ -9,8 +9,8 @@ object QuestionFour {
 
   def mainRunner() = {
 
-    val dataFile = "all_cities_array.json" //Change this to proper path for data
-    val savePathQuestionFour = "C:\\Users\\kylep\\Desktop\\StagingProject\\Code\\Q4" //Change this to desired path when saving file
+    val dataFile = "input/all_cities_array.json" //Change this to proper path for data
+    val savePathQuestionFour = "output/question4/" //Change this to desired path when saving file
 
     Logger.getLogger("org").setLevel(Level.ERROR)
 

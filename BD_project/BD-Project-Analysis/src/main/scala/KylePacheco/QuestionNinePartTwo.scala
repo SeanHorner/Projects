@@ -9,7 +9,7 @@ object QuestionNinePartTwo {
   def mainRunner(): Unit = {
 
     val dataFile = "all_cities_array.json"
-    val savePathQuestionNine = "C:\\Users\\kylep\\Desktop\\StagingProject\\Code\\Q9P2"
+    val savePathQuestionNine = "output/question9/"
 
     Logger.getLogger("org").setLevel(Level.ERROR)
 
@@ -41,7 +41,7 @@ object QuestionNinePartTwo {
       .option("header","true")
       .mode("overwrite")
       .format("csv")
-      .save(savePathQuestionNine)
+      .save(savePathQuestionNine + "Q9P2.csv")
 
 
     spark.stop()
