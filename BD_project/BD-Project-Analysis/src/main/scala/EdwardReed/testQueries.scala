@@ -19,12 +19,15 @@ object testQueries {
     import spark.implicits._
     spark.sparkContext.setLogLevel("WARN")
 
+    val output15: String = "output/question14/"
+    val output8: String = "output/question14/"
+
 
     //This dataframe is created using the tsv file
     //val events = spark.read.option("sep", "\t").option("header", "true").csv(args(0))
     //  .withColumn("rsvp_count", $"yes_rsvp_count".cast("Int"))
 
-    val events = spark.read.parquet("full_data.parquet")
+    val events = spark.read.parquet("input/all_cities.parquet")
       .withColumn("rsvp_count", $"yes_rsvp_count".cast("Int"))
       .withColumn("Venue State", $"localized_location".substr(length($"localized_location") - 2, length($"localized_location") - 1))
 
@@ -38,7 +41,7 @@ object testQueries {
     //cities.show(false)
 
     //Writes the answer to question 8 to file.
-    cities.coalesce(1).write.option("header", "true").option("delimiter", "\t").csv("q8.tsv")
+    cities.coalesce(1).write.option("header", "true").option("delimiter", "\t").csv(output8 + "q8.tsv")
 
 
     //Creates the dataframe for question 15: creates a dataframe with the event name and the venue's city, date,
@@ -55,11 +58,11 @@ object testQueries {
       .agg(count("Venue State").as("Number of Venues"))
       .orderBy(functions.desc("Number of Events"))
 
-    numStates.coalesce(1).write.option("header", "true").option("delimiter", "\t").csv("venues_per_state.tsv")
+    numStates.coalesce(1).write.option("header", "true").option("delimiter", "\t").csv(output15 + "venues_per_state.tsv")
 
     val forGraph = numStates.select($"*").limit(15)
 
-    plot(forGraph, "States with the most venues", "venues_per_state")
+    plot(forGraph, "States with the most venues", output15 + "venues_per_state")
 
     //Returns a dataframe that contains the venue name, the group that hosted the event's name and the location
     //  ot the group
@@ -72,7 +75,7 @@ object testQueries {
     //popVenues.show(false)
 
     //Writes the answer to question 15 to a file.
-    popVenues.coalesce(1).write.option("header", "true").option("delimiter", "\t").csv("q15.tsv")
+    popVenues.coalesce(1).write.option("header", "true").option("delimiter", "\t").csv(output15 + "q15.tsv")
 
   }
 
