@@ -155,7 +155,7 @@ object spark_runner {
       .option("headers", "true")
       .save("question_1_data")
 
-    outputConverter("question_1_data", "question_1/question_1.tsv")
+    outputConverter("question_1_data", "question1/question_1.tsv")
 
     Q1DF.unpersist()
 
@@ -183,7 +183,7 @@ object spark_runner {
       .option("sep", "\t")
       .save("question_3_data_byCount")
 
-    outputConverter("question_3_data_byCount", "question_3/question_3_byCount.tsv")
+    outputConverter("question_3_data_byCount", "question3/question_3_byCount.tsv")
 
     Q3DF_byCount.unpersist()
 
@@ -206,7 +206,7 @@ object spark_runner {
       .option("sep", "\t")
       .save("question_3_data")
 
-    outputConverter("question_3_data", "question_3/question_3.tsv")
+    outputConverter("question_3_data", "question3/question_3.tsv")
 
     Q3DF.unpersist()
 
@@ -231,7 +231,7 @@ object spark_runner {
       .option("sep", "\t")
       .save("question_5_data_byCount")
 
-    outputConverter("question_5_data_byCount", "question_5/question_5_byCount.tsv")
+    outputConverter("question_5_data_byCount", "question5/question_5_byCount.tsv")
 
     Q5DF_byCount.unpersist()
 
@@ -251,7 +251,7 @@ object spark_runner {
       .option("sep", "\t")
       .save("question_5_data_firstday")
 
-    outputConverter("question_5_data_firstday", "question_5/question_5_firstday.tsv")
+    outputConverter("question_5_data_firstday", "question5/question_5_firstday.tsv")
 
     Q5DF_first_day.unpersist()
 
@@ -271,7 +271,7 @@ object spark_runner {
       .option("sep", "\t")
       .save("question_5_data_fullset")
 
-    outputConverter("question_5_data_fullset", "question_5/question_5_full.tsv")
+    outputConverter("question_5_data_fullset", "question5/question_5_full.tsv")
 
     Q5DF_fullset.unpersist()
 
@@ -345,7 +345,7 @@ object spark_runner {
       .option("headers", "true")
       .save("question_13_data")
 
-    outputConverter("question_13_data", "question_13/question_13_avgs.tsv")
+    outputConverter("question_13_data", "question13/question_13_avgs.tsv")
 
   }
 
