@@ -31,7 +31,8 @@ object Runner {
     import spark.implicits._
 
     // Read parquet files and convert to dataframes
-    val df = spark.read.parquet("all_cities.parquet").createOrReplaceTempView("view1")
+    // Change parquet reading path to the appropriate directory.
+    val df = spark.read.parquet("input").createOrReplaceTempView("view1")
 //      spark.read.option("header", "true")
 //      .option("sep", "\t")
 //      .csv("data_50cities_v3.tsv")
@@ -47,7 +48,7 @@ object Runner {
 
     // Store results into csv files
     q1.coalesce(1).write.format("com.databricks.spark.csv")
-      .save("results/yearly_events")
+      .save("output/question6/yearly_events")
 
     //-----------------------------------------------------------------------------------------------------------------
     // Question 6: Find the tech event counts for each month in 2020
@@ -73,7 +74,7 @@ object Runner {
     val q2 = q2a.join(q2b.join(q2c, "months"), "months").orderBy($"months".asc)
 
     q2.coalesce(1).write.format("com.databricks.spark.csv")
-      .save("results/monthly_events_2018to2020")
+      .save("output/question6/monthly_events_2018to2020")
 
     //-----------------------------------------------------------------------------------------------------------------
     // Question 12: How has the capacity (total rsvp_limit) changed over time? Find total rsvp limit.
@@ -86,7 +87,7 @@ object Runner {
       "ORDER BY year")//.show()
 
     q3.coalesce(1).write.format("com.databricks.spark.csv")
-      .save("results/yearly_rsvp")
+      .save("output/question12/yearly_rsvp")
 
     //-----------------------------------------------------------------------------------------------------------------
     // Sub-question: Find total rsvp_limit for each month in 2020.
@@ -117,16 +118,16 @@ object Runner {
     val q4 = q4a.join(q4b.join(q4c, "months"), "months").orderBy($"months".asc)
 
     q4.coalesce(1).write.format("com.databricks.spark.csv")
-      .save("results/monthly_rsvp_2018to2020")
+      .save("output/question12/monthly_rsvp_2018to2020")
 
     //-----------------------------------------------------------------------------------------------------------------
     // Plot stacked bar chart
-    plotStackedBar(q2, "Tech Events Created Monthly From 2018-2020", "Q6Monthly")
-    plotStackedBar(q4, "Total RSVP Limit Monthly From 2018-2020", "Q12Monthly")
+    plotStackedBar(q2, "Tech Events Created Monthly From 2018-2020", "Q6Monthly", "question6")
+    plotStackedBar(q4, "Total RSVP Limit Monthly From 2018-2020", "Q12Monthly", "question12")
 
     // Plot bar charts
-    plotBar(q1, "Tech Events Created Yearly From 2002-2020", "Q6Yearly")
-    plotBar(q3, "Total RSVP Limit Yearly From 2005-2020", "Q12Yearly")
+    plotBar(q1, "Tech Events Created Yearly From 2002-2020", "Q6Yearly", "question6")
+    plotBar(q3, "Total RSVP Limit Yearly From 2005-2020", "Q12Yearly", "question12")
   }
 
   /**
@@ -135,7 +136,7 @@ object Runner {
    * @param title Name of the chart.
    * @param fname File name of the png(chart image) saved under a directly path.
    */
-  def plotStackedBar(df: DataFrame, title: String, fname: String): Unit ={
+  def plotStackedBar(df: DataFrame, title: String, fname: String, path: String): Unit ={
     // Convert df into Array of Rows
     val arr = df.collect()
 
@@ -168,7 +169,7 @@ object Runner {
       .frame()
       .bottomLegend()
       .render()
-      .write(new File(s"C:/Users/quanv/IdeaProjects/stagingpj-meetup/${fname}.png"))
+      .write(new File(s"out/${path}/${fname}.png"))
 
   }
 
@@ -178,7 +179,7 @@ object Runner {
    * @param title Name of the chart.
    * @param fname File name of the png(chart image) saved under a directly path.
    */
-  def plotBar(df: DataFrame, title: String, fname: String): Unit ={
+  def plotBar(df: DataFrame, title: String, fname: String, path: String): Unit ={
     // Convert dataframe into sequence of doubles for axes
     val seq = df.collect().map(row => row.toSeq.map(_.toString.toDouble)).toSeq.flatten
 
@@ -206,6 +207,6 @@ object Runner {
       //.yAxis()
       //.frame()
       .render()
-      .write(new File(s"C:/Users/quanv/IdeaProjects/stagingpj-meetup/${fname}.png"))
+      .write(new File(s"output/${path}/${fname}.png"))
   }
 }
