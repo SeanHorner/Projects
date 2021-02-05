@@ -1,0 +1,182 @@
+Question 1: New Tech v Old Tech
+
+Slide 9: Grouped by Era
+Here we can see the cumulative mentions of technologies
+broken down into three categories: 
+  - Pre-90's languages,
+  - 90's languages,
+  - Post-90's tech, such as Scala, Android, and Rust.
+These are very general breakdowns and some technologies have
+shown their obvious staying power with new iterations
+(such as SQL and Python).
+Major takeaways:
+  - 90's tech is by far and away the most mentioned category
+    (boasting 19385 mentions last year to Pre- and Post-90's
+    7232 and 8285, respectively). This era includes favorites
+    such as Python, Java, JavaScript, and Ruby. 
+  - Post 90's tech has had the highest average increase in
+    mentions (averaging 129% on year, compared to 69 and 67%
+    for Pre-90's and 90's tech, respectively) but it has also
+    the only tech era to see a contraction of mentions, having
+    falling numbers of mentions every year from 2017-2019.
+  - Pre-90's tech makes a solid showing in the mentions, most
+    likely due to backbone languages like SQL, Matlab, and Perl,
+    as well as a recent resurgence in interest around COBOL and
+    Pascal, due problems around archaic state unemployment 
+    systems.
+
+Slide 10:
+Here we have a breakdown of mentions about languages created 
+before the 90's. Fan favorites include languages such as COBOL, 
+SQL, and Perl.
+Major takeaways:
+- SQL is absolutely the winner in this category, last year
+  having 4166 mentions in event descriptions (to Ada's 1730
+  and Matlab's 1188). SQL mentions make up 69% of mentions in
+  this category total across all data.
+- Also last year was a boom year for pre-90's languages, growing
+  their mentions by a whopping 72.03%. The indisputable upstart
+  for the year was Matlab, growing by an insane 1164% from the
+  year before although Ada and SQL were no slouches either, 
+  growing by 117 and 37%, respectively.
+- Unsurprisingly, SQL was ranks at the top of the year on year
+  statistics, boasting 244% growth on average, but a surprising
+  (or perhaps unsurprising) close second is COBOL, with an
+  average of 170%.
+
+Slide 11:
+This slide shows a breakdown of mentions of the languages 
+created in the 90's, such as Python, Java, JavaScript and Ruby.
+Major takeways:
+- This category also boasts an obvious winner: Python, which
+  should surprise no one as it is still one of the most widely
+  learned and used languages to date, especially amongst
+  hobbyists. Last year it was mentioned in 9566 event
+  descriptions, compared to JavaScript's 5656 and Java's 1883.
+- This category itself boasts the most mentions year over year,
+  regularly comprising 60-75% of the total mentions in a given
+  year and holding a solid 61% of mentions across the dataset.
+  This is undoubtedly due to it's rockstar languages.
+
+Slide 12:
+This slide presents the breakdown of mentions for Post-90's
+technologies, which notably includes the major phone operating
+systems, iOS and Android, as well as Scala, Rust, and Kotlin.
+Major takeaways:
+- As with the other eras, this one has a prominent leader which
+  is iOS, regularly taking between 40 and 60% of the mentions
+  attributed to this set of technologies each year, with 48% of
+  total mentions overall.
+- While the rankings stay pretty consistent year to year, there
+  is a notable growth in mentions of the Rust language, which is
+  unsurprising as it's Microsoft's pick to replace C# in the
+  future.
+- The other pronounced technology in this set is Android, which
+  garners slightly over 24% of mentions across the entire
+  dataset.
+
+
+Slide 18:
+The next question we proposed was what is the most common time
+that events are created.
+This chart shows the frequency of event creation for every
+minute of the day. This number was calculated by taking the
+creation time in milliseconds of each event in the dataset,
+adjusting the time for the local timezone offset, and combining
+milliseconds into minute blocks. The red line is the calculated
+average event creation per minute across the data set, equaling
+510 events per minute.
+As we can see there are definitely some stand out peaks which
+we will discuss on the next slides.
+
+Slide 19:
+Here we have the top 20 indivdual minutes of event creation
+presented with their 24-hour format minute. As we can see the
+top 3 minutes are 9:08 AM with 1520 events created in that
+minute (1010 above the average); 11:41 AM with 1461, and 2:47 PM
+with 1438.
+
+Slide 20:
+This slide shows the same top 20 minutes but put in chronological
+order. Here we can see that the top 3 event creation times are
+spread fairly evenly between the morning, mid-day, and early
+afternoon. The full window of peak event creation is effectively
+9 AM to 4 PM.
+
+Slide 21:
+The next question we decided to research was are events with
+longer or shorter durations more popular? Unfortunately meetup
+most meetings did not have an explicit or firm attendence number
+so instead we decided to focus on the number of events of
+varying durations.
+The chart presented on this slide shows the number of events of
+durations up to 12 hours.
+
+Slide 22:
+This slide shows the full dataset, except for the first 24 hours
+out to the maximum event length, a fortnight or 14 days. As we
+can see, there are a good number of events in the 2, 3, and 4
+day range as well as decent blip at 10080 minutes, or 1 week.
+
+Slide 23:
+This slide shows the top 20 most popular event durations ranked
+by their total number of events. The vast majority of events are
+represented in the 1 to 4 hour range with 2 hours being the
+prominent leader with 206,558 events, nearly 2.5 times the 
+total of the next most common duration, 3 hours with ~84,000 events.
+
+Slide 24:
+This chart shows the same 20 durations but this time put in
+chronological order. As we can see, :15 and :45 minute times do
+appear in the list but are comparitively uncommon. It is also
+notable that 3 hours is the default event duration. Since the
+most common duration is shorter than this default we conclude
+that shorter durations are more popular than longer ones,
+although there are some notable long term durations.
+
+Slide 25:
+The next question we explored was if there has been a change in
+planning times for events. We dertermined planning time as the
+amount of time between an event's creation and it's start time.
+As can be seen in the chart average planning time, presented here
+in milliseconds, follows a rather anfractuous track but, as the 
+red line shows, it is possible to assign it a trendline that 
+matches with a 95% confidence, albeit a 4th degree polynomial 
+and that misses some wild fluctuations in the 2010-2013 range.
+
+And with that I'll pass if off to Kyle to discuss our next 
+question.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
