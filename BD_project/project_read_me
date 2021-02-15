@@ -1,0 +1,23 @@
+### Purpose
+This project's purpose is to utilize our team's big data skills (specifically the Apache Spark ecosystem) to collect and perform analyses 
+on a dataset gathered from the Meetup.com API. Our focus was to determine trends about groups and their events focused around technology. 
+Data gathering and pruning was also performed by the team. 
+
+### Goals
+Analysis questions and goals are:
+- How many events were created for each month and year?
+- How many upcoming events are being hosted online compared to in-person?
+- What is the trend of events about new technologies vs. older ones?
+- Which cities hosted the most technology-based events? Which venues?
+- What are some of the most common event topics?
+- What is the most popular time when events are created?
+- Are events with longer durations more popular than those with shorter durations?
+- Has there been a change in planning period time for events?
+- Which events have the most RSVPs?
+- How has event capacity changed over the months/years?
+- What is the preferred payment method for events?
+- How has the average cost of events changed over time?
+- What are the largest tech groups in the dataset?
+
+### Enviornment / Technologies
+Scala, sbt, Parquet, Spark, Spark SQL
